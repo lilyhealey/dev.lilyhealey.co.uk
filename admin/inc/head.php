@@ -1,9 +1,15 @@
 <?php
-require_once("config.php");
-require_once("model.php");
-require_once("objects.php");
-require_once("wires.php");
-require_once("media.php");
+// path to config file
+$config = __DIR__."/../../lib/config.php";
+require_once($config);
+
+// shared
+require_once($lib_path."model.php");
+require_once($lib_path."objects.php");
+require_once($lib_path."wires.php");
+require_once($lib_path."media.php");
+
+// specific to this 'app'
 require_once("url.php");
 require_once("request.php");
 

@@ -3,7 +3,7 @@ require_once("inc/head.php");
 
 $uri = explode('/', $_SERVER['REQUEST_URI']);
 $page = $uri[2];
-$pfile = $page.".php";
+$pfile = "views/".$page.".php";
 
 $o_slugs = array_slice($uri, 3);
 
@@ -16,11 +16,11 @@ if($page) {
 	}
 	catch(Exception $e) {
 		// change to 404 error
-		require_once("cover.php");
+		require_once("views/cover.php");
 	}
 }
 else
-	require_once("cover.php");
+	require_once("views/cover.php");
 
 require_once("inc/foot.php"); 
 ?>

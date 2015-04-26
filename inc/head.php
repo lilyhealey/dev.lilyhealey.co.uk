@@ -1,18 +1,20 @@
 <?php
-require_once("config.php");
+// path to config file
+$config = __DIR__."/../lib/config.php";
+require_once($config);
+
+// shared 
+require_once($lib_path."model.php");
+require_once($lib_path."objects.php");
+require_once($lib_path."wires.php");
+require_once($lib_path."media.php");
+
+// specific to this 'app'
 require_once("url.php");
-
-$org_path = __DIR__."/../admin/inc/";
-require_once($org_path."model.php");
-require_once($org_path."objects.php");
-require_once($org_path."wires.php");
-require_once($org_path."media.php");
-// require_once($org_path."url.php");
-require_once($org_path."request.php");
-
+require_once("request.php");
 require_once("lib.php");
 
-$db = db_connect();
+$db = db_connect("guest");
 
 $ob = new Objects();
 $mm = new Media();

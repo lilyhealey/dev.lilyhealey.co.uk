@@ -28,7 +28,10 @@ $ca = $ob->children_all(0);
 ?>hello, world?</br><?
 echo $u->id;
 echo $u->url;
-print_r($u->ids);
+echo "<div>object: </div>";
+print_r($ob->get($u->id));
+echo "<div>media: </div>";
+print_r($ob->media($u->id));
 print_r($u->urls);
 traverse(0);
 echo display_nav();

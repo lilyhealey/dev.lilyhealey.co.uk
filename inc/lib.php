@@ -41,7 +41,7 @@ function display_nav()
 			array_pop($urls);
 		$urls[] = $o[0]['url'];
 		$url = implode("/", $urls);
-		$url = "http://".$host.$url;
+		$url = $host.$url;
 		$html.="<div><a href='".$url."'>".$d.". ".$name."</a></div>";
 		$prevd = $d;
 		
