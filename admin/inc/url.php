@@ -32,6 +32,7 @@ class URL
 		global $ob;
 		$urls = $ob->ids_to_urls($this->ids);
 		$url = implode("/", $urls);
+		$url = trim($url, "/");
 		return $url;
 	}
 	

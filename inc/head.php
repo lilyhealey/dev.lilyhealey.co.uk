@@ -8,11 +8,11 @@ require_once($lib_path."model.php");
 require_once($lib_path."objects.php");
 require_once($lib_path."wires.php");
 require_once($lib_path."media.php");
+require_once($lib_path."lib.php");
 
 // specific to this 'app'
 require_once("url.php");
 require_once("request.php");
-require_once("lib.php");
 
 $db = db_connect("guest");
 
@@ -68,6 +68,7 @@ else
 <html>
 	<head>
 		<title><? echo $title; ?></title>
+		<link rel="shortcut icon" href="<? echo $host;?>static/icon.png">
 	</head>
 	<body>
 		<div id="page">

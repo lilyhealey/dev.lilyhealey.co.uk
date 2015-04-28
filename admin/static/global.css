@@ -40,11 +40,11 @@ a:hover	{
 }
 
 a::before {
-	content: "[";
+	/*content: "[";*/
 }
 
 a::after {
-	content: "]";
+	/*content: "]";*/
 }
 
 textarea {
@@ -84,6 +84,12 @@ input {
 #body {
 	background-color: #eee;
 	/*padding: 10px;*/
+}
+
+#nav {
+	position: fixed;
+	background-color: #fff;
+	padding: 20px;
 }
 
 .parent:empty,

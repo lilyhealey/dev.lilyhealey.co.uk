@@ -1,26 +1,22 @@
 <?php
-require_once("inc/head.php"); 
 
+// uri is of the form /admin/$view/$o[url]/$o[url]/...
+// views are in folder ./views
 $uri = explode('/', $_SERVER['REQUEST_URI']);
-$page = $uri[2];
-$pfile = "views/".$page.".php";
+$view = "views/";
+$view.= $uri[2] ? $uri[2]: "cover";
+$view.= ".php";
 
-$o_slugs = array_slice($uri, 3);
-
-if($page) {
-	try {
-		if(!file_exists($pfile))
-			throw new Exception("404");
-		else
-			require_once($pfile);
-	}
-	catch(Exception $e) {
-		// change to 404 error
-		require_once("views/cover.php");
-	}
+try {
+	if(!file_exists($view))
+		throw new Exception("404");
 }
-else
-	require_once("views/cover.php");
+catch(Exception $e) {
+	$view.= "errors/".$e->getMessage().".php";
+}
 
+require_once("inc/head.php");
+require_once($view);
 require_once("inc/foot.php"); 
+
 ?>

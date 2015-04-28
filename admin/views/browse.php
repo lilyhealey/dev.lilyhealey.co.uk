@@ -1,38 +1,43 @@
 <?php
 
-//  get children (if any)
-$children = $ob->children($u->id);
-
-$pad = floor(log10(count($children))) + 1;
-if($pad < 2) 
-	$pad = 2;
-
-for($i = 0; $i < count($children); $i++)
-{
-	// truncate long names
-	$name = $children[$i]["name1"];
-	if (strlen($name) > 60)
-		$name = substr($name, 0, 60) ."...";
-	$children[$i]["name"] = strip_tags($name);
-	
-	// object url
-	$children[$i]["url"] = $admin_path . "browse/" . $u->urls();
-	if (sizeof($u->ids))
-		$children[$i]["url"] .= "/";
-	$children[$i]["url"] .= $children[$i]["o"];
-	
-	// object 0-padded index
-	$children[$i]["n"] = str_pad($i+1, $pad, "0", STR_PAD_LEFT);
-}
-
 if($u->id)
 	$item = $ob->get($u->id);
 else
 	$item = $ob->get(0);
 $name = strip_tags($item["name1"]);
 
+$full = traverse(0);
+$traversed = traverse($u->id);
+$url_root = $admin_path.'browse';
+if($u->urls())
+	$url_root.="/".$u->urls();
+//$nav = nav($traversed, $url_root."/");
+$nav = nav($traversed, "");
+//$fullnav = nav($full, $admin_path."browse/");
+$fullnav = nav($full, "");
+
 ?>
 <div id="body-container">
+	<div id="nav" class="centre"><?
+		$t = "&nbsp;&nbsp;&nbsp;&nbsp;";
+		$prevd = $fullnav[0]['depth'];
+		foreach($fullnav as $n)
+		{
+			$d = $n['depth'];
+// 			if($d > $prevd)
+// 				continue;
+			$tab = "";
+			for($i = 1; $i < $d; $i++)
+				$tab.= $t;
+			?><div><?
+				echo $tab;
+				?><a href="<? echo $n['url']; ?>"><?
+					echo $n['name'];
+				?></a>
+			</div><?
+			$prevd = $d;
+		}
+	?></div>
 	<div id="body" class="centre">
 		<div class="parent-container"><?php 
 			for($i = 0; $i < count($parents); $i++) 
@@ -57,22 +62,43 @@ $name = strip_tags($item["name1"]);
 			?></div>
 		</div>
 		<div class="children-container"><?php
-			for($i = 0; $i < count($children); $i++)
+			$t = "&nbsp;&nbsp;&nbsp;&nbsp;";
+			$prevd = $nav[0]['depth'];
+			$count = 0;
+			for($i = 0; $i < count($nav); $i++)
 			{
+				$d = $nav[$i]['depth'];
+				if($d > $prevd)
+					continue;
+				$tab = "";
+				for($j = 1; $j < $d; $j++)
+					$tab.= $t;
 			?><div class="child">
-				<span><? echo $children[$i]["n"]; ?></span>
-				<span>
-					<a href="<? echo $children[$i]['url'];?>"><?
-						echo $children[$i]["name"];
+				<span><? echo ++$count; ?></span>
+				<span><?
+					echo $tab;
+					$url_root = $admin_path."browse";
+					if($u->urls())
+						$url_root.="/".$u->urls();
+					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>"><?
+						echo $nav[$i]['name'];
 					?></a>
 				</span>
-			</div><?php
+				<span><?
+					$url_root = $admin_path."edit";
+					if($u->urls())
+						$url_root.="/".$u->urls();
+					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">edit</a>
+				</span>
+				<span><?
+					$url_root = $admin_path."delete";
+					if($u->urls())
+						$url_root.="/".$u->urls();
+					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">delete</a>
+				</span>
+			</div><?
+				$prevd = $d;
 			}
-// 			print_r($u->ids);
-// 			print_r($u->urls);
-// 			echo $u->id;
-// 			echo $u->url;
-// 			print_r($children);
 		?></div>
 		<div class="actions">
 			<a href="<? echo $admin_path; ?>add/<?php echo $u->urls(); ?>">add object</a>
