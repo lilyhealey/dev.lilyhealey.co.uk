@@ -9,7 +9,7 @@ $oarr = $ob->get($u->id);
 <div><? print_r($oarr); ?></div>
 <div><? 
 $list = traverse(0);
-$list2 = nav($list);
+$list2 = nav($list, "");
 //print_r($list);
 $urls = array();
 $prevd = 0;
