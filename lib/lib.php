@@ -1,29 +1,6 @@
 <?
-// takes: root node
-// returns: a list of associative arrays with depth, o
-// function traverse($node)
-// {
-// 	global $oo;
-// 	static $depth = 0;
-// 
-// 	$o = $oo->get($node);
-// 	$children = $oo->children($node);
-// 	$list = array();
-// 	
-// 	if($depth > 0)
-// 		$list[] = array('depth'=>$depth, 'o'=>$o);
-// 	
-// 	if(!empty($children[0]))
-// 	{
-// 		$depth++;
-// 		foreach($children as $c)
-// 			$list = array_merge($list, traverse($c['id']));
-// 		$depth--;
-// 	}
-// 	return $list;
-// }
 
-// takes: a tree constructed by traverse()
+// takes: a tree constructed by $oo->traverse()
 // returns; an associative array of name1, urls
 function nav($tree, $url_root)
 {
@@ -46,5 +23,21 @@ function nav($tree, $url_root)
 		$prevd = $d;
 	}
 	return $nav;
+}
+
+function slug($name = "untitled")
+{
+	$pattern = '/(\A\W+|\W+\z)/';
+	$replace = '';
+	$tmp = preg_replace($pattern, $replace, $name);
+	
+	$pattern = '/\s+/';
+	$replace = '-';
+	$tmp = preg_replace($pattern, $replace, $tmp);
+	
+	$pattern = '/[^-\w]+/';
+	$replace = '';
+	$tmp = preg_replace($pattern, $replace, $tmp);
+	return strtolower($tmp);
 }
 ?>

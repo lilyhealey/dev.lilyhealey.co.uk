@@ -52,9 +52,7 @@ $fullnav = nav($full, $admin_path."browse/");
 		<div class="self-container">
 			<div class="self"><?php 
 				if($uu->id) { ?>
-				<span><?php echo $name; 
-							print_r($oo->ancestors($uu->id));
-					?></span>
+				<span><?php echo $name;?></span>
 				<span>
 					[<a href="<? echo $admin_path; ?>edit/<?php echo $uu->urls(); ?>">edit</a>]
 				</span>

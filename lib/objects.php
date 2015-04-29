@@ -9,55 +9,14 @@ class Objects extends Model
 {
 	const table_name = "objects";
 	
-	// return the name of this object
+	// return the name of object with id $o
 	public function name($o)
 	{
 		$item = $this->get($o);
 		return $item["name1"];
 	}
 	
-	// return the parents of this object
-	public function parents($objects)
-	{
-		global $admin_path;
-		$parents[] = ""; // is this necessary?
-
-		$uu = $this->ids_to_urls($objects);
-
-		for ($i = 0; $i < count($objects) - 1; $i++) 
-		{
-			$item = $this->get($objects[$i]);
-			$name = strip_tags($item["name1"]);
-
-			// Each panel expands on title click
-			$parents[$i]["url"] = $admin_path."browse/";
-			for ($j = 0; $j < $i + 1; $j++)
-			{
-				$parents[$i]["url"] .= $u[$j];
-				if ($j < $i)
-					$parents[$i]["url"] .= "/";
-			}
-			$parents[$i]["name"] = $name;
-		}
-		if($parents[0] == "")
-			unset($parents);
-		return $parents;
-	}
-	
-	// return the children of this object
-	public function children_x($o)
-	{
-		$fields = array("objects.name1", "objects.url AS o");
-		$tables = array("objects", "wires");
-		$where 	= array("wires.fromid = '".$o."'",
-						"wires.toid = objects.id",
-						"wires.active = '1'",
-						"objects.active = '1'");
-		$order 	= array("objects.rank", "name1");
-		
-		return $this->get_all($fields, $tables, $where, $order);	
-	}
-	
+	// return the children of object with id $o
 	public function children($o)
 	{
 		$fields = array("*", "objects.id AS id");
@@ -94,7 +53,7 @@ class Objects extends Model
 	
 	public function ids_to_urls($objects)
 	{
-		$uu = array();
+		$u = array();
 		for($i = 0; $i < count($objects); $i++)
 		{
 			$o = $this->get($objects[$i]);
@@ -161,15 +120,6 @@ class Objects extends Model
 	// (because doing so would create a loop)
 	public function unlinked_list($o)
 	{
-		$fields = array("objects.id", "objects.name1");
-		$tables = array("objects", "wires");
-		$where 	= array("objects.active = 1",
-						"wires.active = 1",
-						"wires.toid = objects.id",
-						"wires.fromid != ".$o,
-						"objects.id != ".$o);
-		$order 	= array("objects.name1");
-		$limit = '';
 		
 		$all = $this->traverse(0);
 		$all_ids = array();
@@ -187,6 +137,7 @@ class Objects extends Model
 		return $include_ids;
 	}
 
+	// returns an array of [depth, o] of objects rooted at $o
 	public function traverse($o)
 	{
 		static $depth = 0;

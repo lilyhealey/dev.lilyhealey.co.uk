@@ -18,28 +18,29 @@ $uu = new URL();
 $r = new Request();
 
 // Check that selected object exists
-if ($uu->id && is_numeric($uu->id))
-{
-	$item = $oo->get($uu->id);
-	
-	if (!$oo->active($uu->id)) 
-	{
-		$url = "";
-		for ($i = 0; $i < sizeof($uu->ids)-1; $i++) 
-		{
-			if($i == 0)
-				$url .= "?object=" . $uu->ids[$i];
-			if($i < sizeof($uu->ids)-2) 
-				$url .= ",";
-		}
-		header("location:". $admin_path ."browse.php". $url);
-	}
-	$name = $item["name1"];
-	$title = $name;
-}
+// if ($uu->id && is_numeric($uu->id))
+// {
+// 	$item = $oo->get($uu->id);
+// 	
+// 	if (!$oo->active($uu->id)) 
+// 	{
+// 		$url = "";
+// 		for ($i = 0; $i < sizeof($uu->ids)-1; $i++) 
+// 		{
+// 			if($i == 0)
+// 				$url .= "?object=" . $uu->ids[$i];
+// 			if($i < sizeof($uu->ids)-2) 
+// 				$url .= ",";
+// 		}
+// 		header("location:". $admin_path ."browse.php". $url);
+// 	}
+// 	$name = $item["name1"];
+// 	$title = $name;
+// }
 
 // parents
-$parents = $oo->parents($uu->ids);
+//$parents = $oo->parents($uu->ids);
+$parents = $uu->parents();
 
 // $uu = $oo->objects_to_url($r->objects);
 // print_r($u);
@@ -58,21 +59,7 @@ if ($title)
 else
 	$title = $db_name;
 	
-function slug($name = "untitled")
-{
-	$pattern = '/(\A\W+|\W+\z)/';
-	$replace = '';
-	$tmp = preg_replace($pattern, $replace, $name);
-	
-	$pattern = '/\s+/';
-	$replace = '-';
-	$tmp = preg_replace($pattern, $replace, $tmp);
-	
-	$pattern = '/[^-\w]+/';
-	$replace = '';
-	$tmp = preg_replace($pattern, $replace, $tmp);
-	return strtolower($tmp);
-}
+
 ?>
 <!DOCTYPE html>
 <html>

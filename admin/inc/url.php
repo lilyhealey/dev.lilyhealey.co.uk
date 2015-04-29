@@ -10,7 +10,6 @@ class URL
 	function __construct()
 	{
 		global $oo;
-		global $db;
 		
 		$urls = explode('/', $_SERVER['REQUEST_URI']);
 		$urls = array_slice($urls, 3);
@@ -27,28 +26,43 @@ class URL
 		$this->id = $id;
 	}
 	
+	// return a string of the current urls
+	// defaults to empty string if none
 	public function urls()
 	{
-		global $oo;
-		$urls = $oo->ids_to_urls($this->ids);
-		if($urls)
-		{
-			$url = implode("/", $urls);
-			$url = trim($url, "/");
-		}
-		else
-			$url = "";
-		return $url;
+		return implode("/", $this->urls);
 	}
 	
 	public function back()
 	{
+		$urls = $this->urls;
+		array_pop($urls);
+		return implode("/", $urls);
+		// return $url;
+	}
+	
+	public function parents()
+	{
 		global $oo;
+		global $admin_path;
+		$urls = $this->urls;
 		$ids = $this->ids;
-		array_pop($ids);
-		$urls = $oo->ids_to_urls($ids);
-		$url = implode("/", $urls);
-		return $url;
+		$parents[] = "";
+		
+		for($i = 0; $i < count($urls)-1; $i++)
+		{
+			$parents[$i]['url'] = $admin_path."browse/";
+			for($j = 0; $j < $i + 1; $j++)
+			{
+				$parents[$i]['url'].= $urls[$j];
+				if($j < $i)
+					$parents[$i]['url'].= "/";
+			}
+			$parents[$i]["name"] = $oo->name($ids[$i]);
+		}
+		if($parents[0] == "")
+			unset($parents);
+		return $parents;
 	}
 }
 
