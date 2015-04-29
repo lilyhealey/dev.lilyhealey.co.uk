@@ -19,7 +19,7 @@
 		<div id="form-container">
 			<form 
 				enctype="multipart/form-data" 
-				action="<?php echo $admin_path ."add/". $u->urls(); ?>" 
+				action="<?php echo $admin_path ."add/". $uu->urls(); ?>" 
 				method="post"
 			>
 				<div id="form"><?php
@@ -52,7 +52,7 @@
 						name='cancel' 
 						type='button' 
 						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$u->urls();?>';"
+						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls();?>';"
 					> 
 				</div>
 				<div>
@@ -85,12 +85,12 @@
 					if($$var)
 						$arr[$var] = "'".$$var."'";
 
-				$toid = $ob->insert($arr);
+				$toid = $oo->insert($arr);
 		
 				unset($arr);
 		
 				/* wires */
-				$fromid = $u->id;
+				$fromid = $uu->id;
 				$arr["created"] = "'".$dt."'";
 				$arr["modified"] = "'".$dt."'";
 				$arr["fromid"] = "'".$fromid."'";
@@ -153,7 +153,7 @@
 				<p>Object added successfully.</p>
 			</div>
 			<div class="self">
-				<a href="<? echo $admin_path; ?>browse/<? echo $u->urls(); ?>">continue... </a>
+				<a href="<? echo $admin_path; ?>browse/<? echo $uu->urls(); ?>">continue... </a>
 			</div>
 		</div><?php 
 			} 

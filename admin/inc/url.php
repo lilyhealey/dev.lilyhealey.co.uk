@@ -9,7 +9,7 @@ class URL
 	
 	function __construct()
 	{
-		global $ob;
+		global $oo;
 		global $db;
 		
 		$urls = explode('/', $_SERVER['REQUEST_URI']);
@@ -17,7 +17,7 @@ class URL
 		$this->urls = $urls;
 		$this->url = $urls[count($urls)-1];
 		
-		$ids = $ob->urls_to_ids($urls);
+		$ids = $oo->urls_to_ids($urls);
 		$id = $ids[count($ids)-1];
 		if(!$id)
 			$id = 0;
@@ -29,19 +29,24 @@ class URL
 	
 	public function urls()
 	{
-		global $ob;
-		$urls = $ob->ids_to_urls($this->ids);
-		$url = implode("/", $urls);
-		$url = trim($url, "/");
+		global $oo;
+		$urls = $oo->ids_to_urls($this->ids);
+		if($urls)
+		{
+			$url = implode("/", $urls);
+			$url = trim($url, "/");
+		}
+		else
+			$url = "";
 		return $url;
 	}
 	
 	public function back()
 	{
-		global $ob;
+		global $oo;
 		$ids = $this->ids;
 		array_pop($ids);
-		$urls = $ob->ids_to_urls($ids);
+		$urls = $oo->ids_to_urls($ids);
 		$url = implode("/", $urls);
 		return $url;
 	}

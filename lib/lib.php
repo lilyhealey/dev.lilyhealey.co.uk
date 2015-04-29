@@ -3,11 +3,11 @@
 // returns: a list of associative arrays with depth, o
 // function traverse($node)
 // {
-// 	global $ob;
+// 	global $oo;
 // 	static $depth = 0;
 // 
-// 	$o = $ob->get($node);
-// 	$children = $ob->children($node);
+// 	$o = $oo->get($node);
+// 	$children = $oo->children($node);
 // 	$list = array();
 // 	
 // 	if($depth > 0)

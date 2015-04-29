@@ -11,25 +11,25 @@ require_once("request.php");
 $user = $_SERVER['REDIRECT_REMOTE_USER'];
 $db = db_connect($user);
 
-$ob = new Objects();
+$oo = new Objects();
 $mm = new Media();
 $ww = new Wires();
-$u = new URL();
+$uu = new URL();
 $r = new Request();
 
 // Check that selected object exists
-if ($u->id && is_numeric($u->id))
+if ($uu->id && is_numeric($uu->id))
 {
-	$item = $ob->get($u->id);
+	$item = $oo->get($uu->id);
 	
-	if (!$ob->active($u->id)) 
+	if (!$oo->active($uu->id)) 
 	{
 		$url = "";
-		for ($i = 0; $i < sizeof($u->ids)-1; $i++) 
+		for ($i = 0; $i < sizeof($uu->ids)-1; $i++) 
 		{
 			if($i == 0)
-				$url .= "?object=" . $u->ids[$i];
-			if($i < sizeof($u->ids)-2) 
+				$url .= "?object=" . $uu->ids[$i];
+			if($i < sizeof($uu->ids)-2) 
 				$url .= ",";
 		}
 		header("location:". $admin_path ."browse.php". $url);
@@ -39,19 +39,19 @@ if ($u->id && is_numeric($u->id))
 }
 
 // parents
-$parents = $ob->parents($u->ids);
+$parents = $oo->parents($uu->ids);
 
-// $u = $ob->objects_to_url($r->objects);
+// $uu = $oo->objects_to_url($r->objects);
 // print_r($u);
 // self
-if($u->id)
-	$item = $ob->get($u->id);
+if($uu->id)
+	$item = $oo->get($uu->id);
 else
-	$item = $ob->get(0);
+	$item = $oo->get(0);
 $name = strip_tags($item["name1"]);
 
 // document title
-$item = $ob->get($u->id);
+$item = $oo->get($uu->id);
 $title = $item["name1"];
 if ($title)
 	$title = $db_name ." | ". $title;

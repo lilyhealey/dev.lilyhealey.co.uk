@@ -13,7 +13,7 @@
 		if(strtolower($r->action) != "delete") 
 		{
 			//  Get ALL objects where "fromid" = this object about to be deleted
-			$children = $ob->children($u->id);
+			$children = $oo->children($uu->id);
 	
 			// determine if children have other ancestors
 			// ie, will they be orphaned after this object is deleted
@@ -29,7 +29,7 @@
 				$items = $ww->get_all($fields, $tables, $where);
 				for($j = 0; $j < count($items); $j++)
 				{
-					if($items[$j]["fromid"] != $u->id)
+					if($items[$j]["fromid"] != $uu->id)
 						$children[$i]["dependent"] = FALSE;
 				}
 				if($children[$i]["dependent"] == TRUE)
@@ -61,7 +61,7 @@
 					if ($children[$i]["dependent"] == TRUE)
 					{
 						$n = STR_PAD($j, $padout, "0", STR_PAD_LEFT);
-						$url = $admin_path . "browse/" . $u->urls() . "," . $children[$i]["url"];
+						$url = $admin_path . "browse/" . $uu->urls() . "," . $children[$i]["url"];
 						$child_name = strip_tags($children[$i]["name1"]);
 						?><div class="child">
 							<span><? echo $n; ?></span>
@@ -72,7 +72,7 @@
 		?></div><?php
 			}
 		?><div id="form-container">
-			<form action="<? echo $admin_path.'delete/'.$u->urls(); ?>" method="post">
+			<form action="<? echo $admin_path.'delete/'.$uu->urls(); ?>" method="post">
 				<div class="form">
 					<input name='action' type='hidden' value='delete'>
 					<input 
@@ -93,24 +93,24 @@
 		else 
 		{
 			//  Get wire that goes to this object to be deleted
-			if (sizeof($u->ids) < 2) 	
+			if (sizeof($uu->ids) < 2) 	
 				$fromid = 0;
 			else
-				$fromid = $u->ids[sizeof($u->ids) - 2];
+				$fromid = $uu->ids[sizeof($uu->ids) - 2];
 
-			$message = $ww->delete_wire($fromid, $u->id);
+			$message = $ww->delete_wire($fromid, $uu->id);
 	
 			// if object has no wires to it, delete object
 			$sql = "UPDATE objects
 					SET active = '0'
-					WHERE id = $u->id'";
+					WHERE id = $uu->id'";
 	
 		?><div class="self-container">
 			<div class="self"><?php 
 				echo $message; 
 			?></div>
 			<div class="self">
-				<a href="<?php echo $admin_path; ?>browse/<? echo $u->back(); ?>">continue...</a>
+				<a href="<?php echo $admin_path; ?>browse/<? echo $uu->back(); ?>">continue...</a>
 			</div>
 		</div><?php
 		}

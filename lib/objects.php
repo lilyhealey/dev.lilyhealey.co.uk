@@ -9,11 +9,6 @@ class Objects extends Model
 {
 	const table_name = "objects";
 	
-	// parents
-	// children
-	// ancestors
-	// descendants
-	
 	// return the name of this object
 	public function name($o)
 	{
@@ -27,7 +22,7 @@ class Objects extends Model
 		global $admin_path;
 		$parents[] = ""; // is this necessary?
 
-		$u = $this->ids_to_urls($objects);
+		$uu = $this->ids_to_urls($objects);
 
 		for ($i = 0; $i < count($objects) - 1; $i++) 
 		{
@@ -99,7 +94,7 @@ class Objects extends Model
 	
 	public function ids_to_urls($objects)
 	{
-		$u = array();
+		$uu = array();
 		for($i = 0; $i < count($objects); $i++)
 		{
 			$o = $this->get($objects[$i]);
@@ -108,6 +103,8 @@ class Objects extends Model
 		return $u;
 	}
 	
+	// return the ids of all ancestors of object with id $o
+	//
 	// ancestors are obtained by traversing tree, 
 	// going through in-order list of traversals,
 	// recording potential parents,
@@ -133,7 +130,7 @@ class Objects extends Model
 		return array_unique($ancestors);
 	}
 	
-	// return all descedants of this object
+	// return the ids of all descedants of object with id $o
 	// children, grandchildren, etc
 	public function descendants($o)
 	{
@@ -189,12 +186,7 @@ class Objects extends Model
 		
 		return $include_ids;
 	}
-	
-	public function url_data($o)
-	{
-		
-	}
-	
+
 	public function traverse($o)
 	{
 		static $depth = 0;

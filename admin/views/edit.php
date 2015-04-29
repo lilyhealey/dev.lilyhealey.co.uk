@@ -12,10 +12,10 @@
 	?></div>
 <?php
 $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
-if ($r->action != "update" && $u->id)
+if ($r->action != "update" && $uu->id)
 {
 	//  get existing image data
-	$medias = $ob->media($u->id);
+	$medias = $oo->media($uu->id);
 	$num_medias = count($medias);
 	
 	/*
@@ -35,23 +35,23 @@ if ($r->action != "update" && $u->id)
 	}
 
 	// object contents
-	if($u->id)
-		$item = $ob->get($u->id);
+	if($uu->id)
+		$item = $oo->get($uu->id);
 	else
-		$item = $ob->get(0);
+		$item = $oo->get(0);
 	$name = strip_tags($item["name1"]);
 	?>
 	
 	<div class="self-container">
 		<div class="self">
-			<a href="<? echo $admin_path; ?>browse/<?php echo $u->urls(); ?>"><?php echo $name; ?></a>
+			<a href="<? echo $admin_path; ?>browse/<?php echo $uu->urls(); ?>"><?php echo $name; ?></a>
 		</div>
 	</div>
 	<div id="form-container">
 		<form
 			method="post"
 			enctype="multipart/form-data" 
-			action="<?php echo htmlspecialchars($admin_path.'edit/'.$u->urls()); ?>" 
+			action="<?php echo htmlspecialchars($admin_path.'edit/'.$uu->urls()); ?>" 
 		>
 			<div class="form"><?php
 				// show object data
@@ -133,7 +133,7 @@ if ($r->action != "update" && $u->id)
 						name='cancel' 
 						type='button' 
 						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$u->urls(); ?>';" 
+						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls(); ?>';" 
 					>
 				</div>
 				<div>
@@ -155,7 +155,7 @@ if ($r->action != "update" && $u->id)
 } 
 else 
 {
-	$item = $ob->get($u->id);
+	$item = $oo->get($uu->id);
 	
 	/* objects */
 	$vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
@@ -185,7 +185,7 @@ else
 	{
 		$arr["modified"] = "'".date("Y-m-d H:i:s")."'";
 		$z = TRUE;
-		$sqlA = $ob->update($u->id, $arr);
+		$sqlA = $oo->update($uu->id, $arr);
 	}
 
 	$mflag = FALSE;
@@ -232,7 +232,7 @@ else
 				$dt = date("Y-m-d H:i:s");
 
 				$m_arr["type"] = "'".$type."'";
-				$m_arr["object"] = "'".$u->id."'";
+				$m_arr["object"] = "'".$uu->id."'";
 				$m_arr["created"] = "'".$dt."'";
 				$m_arr["modified"] = "'".$dt."'";
 				$m_arr["caption"] = "'".$r->captions[count($r->medias)+$i]."'";
@@ -294,7 +294,7 @@ else
 		echo count($r->medias);
 		?></div>
 		<div class="self">
-			<a href="<?php echo $admin_path;?>edit/<?php echo $u->urls(); ?>">refresh object</a>
+			<a href="<?php echo $admin_path;?>edit/<?php echo $uu->urls(); ?>">refresh object</a>
 		</div>
 	</div><?php 
 } ?></div>

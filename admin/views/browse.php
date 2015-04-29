@@ -1,16 +1,16 @@
 <?php
 
-if($u->id)
-	$item = $ob->get($u->id);
+if($uu->id)
+	$item = $oo->get($uu->id);
 else
-	$item = $ob->get(0);
+	$item = $oo->get(0);
 $name = strip_tags($item["name1"]);
 
-$full = $ob->traverse(0);
-$traversed = $ob->traverse($u->id);
+$full = $oo->traverse(0);
+$traversed = $oo->traverse($uu->id);
 $url_root = $admin_path.'browse';
-if($u->urls())
-	$url_root.="/".$u->urls();
+if($uu->urls())
+	$url_root.="/".$uu->urls();
 //$nav = nav($traversed, $url_root."/");
 $nav = nav($traversed, "");
 $fullnav = nav($full, $admin_path."browse/");
@@ -51,21 +51,21 @@ $fullnav = nav($full, $admin_path."browse/");
 		?></div>
 		<div class="self-container">
 			<div class="self"><?php 
-				if($u->id) { ?>
+				if($uu->id) { ?>
 				<span><?php echo $name; 
-							print_r($ob->ancestors($u->id));
+							print_r($oo->ancestors($uu->id));
 					?></span>
 				<span>
-					[<a href="<? echo $admin_path; ?>edit/<?php echo $u->urls(); ?>">edit</a>]
+					[<a href="<? echo $admin_path; ?>edit/<?php echo $uu->urls(); ?>">edit</a>]
 				</span>
 				<span>
-					[<a href="<? echo $admin_path; ?>delete/<?php echo $u->urls(); ?>">delete</a>]
+					[<a href="<? echo $admin_path; ?>delete/<?php echo $uu->urls(); ?>">delete</a>]
 				</span>
 				<span>
-					[<a href="<? echo $admin_path; ?>add/<?php echo $u->urls(); ?>">add object</a>]
+					[<a href="<? echo $admin_path; ?>add/<?php echo $uu->urls(); ?>">add object</a>]
 				</span>
 				<span>
-					[<a href="<? echo $admin_path; ?>link/<?php echo $u->urls(); ?>">link</a>]
+					[<a href="<? echo $admin_path; ?>link/<?php echo $uu->urls(); ?>">link</a>]
 				</span><?php } 
 			?></div>
 		</div>
@@ -86,22 +86,22 @@ $fullnav = nav($full, $admin_path."browse/");
 				<span><?
 					echo $tab;
 					$url_root = $admin_path."browse";
-					if($u->urls())
-						$url_root.="/".$u->urls();
+					if($uu->urls())
+						$url_root.="/".$uu->urls();
 					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>"><?
 						echo $nav[$i]['name'];
 					?></a>
 				</span>
 				<span><?
 					$url_root = $admin_path."edit";
-					if($u->urls())
-						$url_root.="/".$u->urls();
+					if($uu->urls())
+						$url_root.="/".$uu->urls();
 					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">edit</a>
 				</span>
 				<span><?
 					$url_root = $admin_path."delete";
-					if($u->urls())
-						$url_root.="/".$u->urls();
+					if($uu->urls())
+						$url_root.="/".$uu->urls();
 					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">delete</a>
 				</span>
 			</div><?
@@ -109,8 +109,8 @@ $fullnav = nav($full, $admin_path."browse/");
 			}
 		?></div>
 		<!--div class="actions">
-			<a href="<? echo $admin_path; ?>add/<?php echo $u->urls(); ?>">add object</a>
-			<a href="<? echo $admin_path; ?>link/<?php echo $u->urls(); ?>">link</a>
+			<a href="<? echo $admin_path; ?>add/<?php echo $uu->urls(); ?>">add object</a>
+			<a href="<? echo $admin_path; ?>link/<?php echo $uu->urls(); ?>">link</a>
 		</div-->
 	</div>
 </div>

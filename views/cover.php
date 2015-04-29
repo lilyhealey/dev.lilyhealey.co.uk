@@ -2,13 +2,13 @@
 
 $t = 0;
 
-$oarr = $ob->get($u->id);
+$oarr = $oo->get($uu->id);
 
 ?>
 <div>leh</div>
 <div><? print_r($oarr); ?></div>
 <div><? 
-$list = $ob->traverse(0);
+$list = $oo->traverse(0);
 $list2 = nav($list, "");
 //print_r($list);
 $urls = array();

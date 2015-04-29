@@ -14,7 +14,7 @@
 	{
 	?><div class="self-container">
 		<div class="self">
-			<a href="<? echo $admin_path; ?>browse/<?php echo $u->urls(); ?>"><?php echo $name ?></a>
+			<a href="<? echo $admin_path; ?>browse/<?php echo $uu->urls(); ?>"><?php echo $name ?></a>
 		</div>
 		<div class="self">
 			<p>You are linking to an existing object.</p>
@@ -25,18 +25,18 @@
 	<div id="form-container">
 		<form 
 			enctype="multipart/form-data" 
-			action="<? echo $admin_path; ?>link/<? echo $u->urls(); ?>" 
+			action="<? echo $admin_path; ?>link/<? echo $uu->urls(); ?>" 
 			method="post" 
 		>
 			<div class="form">
 				<div>
 					<select name='wires_toid'><?php
-						$items = $ob->unlinked_list($u->id);
+						$items = $oo->unlinked_list($uu->id);
 						foreach($items as $i)
 						{
 						?><option value="<? echo $i; ?>"><?php 
 							//echo $items[$i]['name1']; 
-							echo $ob->name($i);
+							echo $oo->name($i);
 							//print_r($items)
 						?></option><?php	
 						}
@@ -48,7 +48,7 @@
 						name='cancel' 
 						type='button' 
 						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$u->urls();?>';"
+						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls();?>';"
 					>
 					<input name='submit' type='submit' value='Link to Object'>
 				</div>
@@ -60,13 +60,13 @@
 	{
 		/* wires */
 		$wires_toid = addslashes($r->wires_toid);
-		$ww->create_wire($u->id, $wires_toid);
+		$ww->create_wire($uu->id, $wires_toid);
 		?><div class="self-container">
 			<div class="self">
 				Object linked successfully
 			</div>
 			<div class="self">
-				<a href="<? echo $admin_path; ?>browse/<? echo $u->urls() ?>">continue...</a>
+				<a href="<? echo $admin_path; ?>browse/<? echo $uu->urls() ?>">continue...</a>
 			</div>
 		</div><?php 
 	}
