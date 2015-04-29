@@ -8,7 +8,7 @@ $oarr = $ob->get($u->id);
 <div>leh</div>
 <div><? print_r($oarr); ?></div>
 <div><? 
-$list = traverse(0);
+$list = $ob->traverse(0);
 $list2 = nav($list, "");
 //print_r($list);
 $urls = array();

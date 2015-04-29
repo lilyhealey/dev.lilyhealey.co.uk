@@ -3,13 +3,6 @@
 $config = __DIR__."/../lib/config.php";
 require_once($config);
 
-// shared 
-require_once($lib_path."model.php");
-require_once($lib_path."objects.php");
-require_once($lib_path."wires.php");
-require_once($lib_path."media.php");
-require_once($lib_path."lib.php");
-
 // specific to this 'app'
 require_once("url.php");
 require_once("request.php");

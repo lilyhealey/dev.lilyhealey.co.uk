@@ -25,7 +25,7 @@
 			$k = 0;
 			for($i = 0; $i < count($children); $i++)
 			{
-				$where[] = "toid = '" . $children[$i]["o"] . "'";
+				$where[] = "toid = '" . $children[$i]["id"] . "'";
 				$items = $ww->get_all($fields, $tables, $where);
 				for($j = 0; $j < count($items); $j++)
 				{
@@ -61,7 +61,7 @@
 					if ($children[$i]["dependent"] == TRUE)
 					{
 						$n = STR_PAD($j, $padout, "0", STR_PAD_LEFT);
-						$url = $admin_path . "browse/" . $u->urls() . "," . $children[$i]["o"];
+						$url = $admin_path . "browse/" . $u->urls() . "," . $children[$i]["url"];
 						$child_name = strip_tags($children[$i]["name1"]);
 						?><div class="child">
 							<span><? echo $n; ?></span>
@@ -110,7 +110,7 @@
 				echo $message; 
 			?></div>
 			<div class="self">
-				<a href="<?php echo $admin_host; ?>browse/<? echo $u->back(); ?>">continue...</a>
+				<a href="<?php echo $admin_path; ?>browse/<? echo $u->back(); ?>">continue...</a>
 			</div>
 		</div><?php
 		}

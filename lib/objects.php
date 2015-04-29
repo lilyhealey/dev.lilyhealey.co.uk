@@ -18,7 +18,7 @@ class Objects extends Model
 	public function name($o)
 	{
 		$item = $this->get($o);
-		return $item["name"];
+		return $item["name1"];
 	}
 	
 	// return the parents of this object
@@ -50,7 +50,7 @@ class Objects extends Model
 	}
 	
 	// return the children of this object
-	public function children($o)
+	public function children_x($o)
 	{
 		$fields = array("objects.name1", "objects.url AS o");
 		$tables = array("objects", "wires");
@@ -63,7 +63,7 @@ class Objects extends Model
 		return $this->get_all($fields, $tables, $where, $order);	
 	}
 	
-	public function children_all($o)
+	public function children($o)
 	{
 		$fields = array("*", "objects.id AS id");
 		$tables = array("objects", "wires");
@@ -108,16 +108,41 @@ class Objects extends Model
 		return $u;
 	}
 	
+	// ancestors are obtained by traversing tree, 
+	// going through in-order list of traversals,
+	// recording potential parents,
+	// breaking when $o is found,
+	// reporting the actual parents at the time of finding
+	// repeats this process through the entire tree array, in case
+	// object is linked elswhere
 	public function ancestors($o)
 	{
-		
+		$all = $this->traverse(0);
+		$ancestors = array();
+		$a = array();
+		for($i = 0; $i < count($all); $i++)
+		{
+			if($all[$i]['o']['id'] == $o)
+			{
+				$d = $all[$i]['depth'];
+				$ancestors = array_merge($ancestors, array_slice($a, 0, $d-1));
+			}
+			$d = $all[$i]['depth'];
+			$a[$d-1] = $all[$i]['o']['id'];
+		}
+		return array_unique($ancestors);
 	}
 	
 	// return all descedants of this object
 	// children, grandchildren, etc
 	public function descendants($o)
 	{
+		$desc = $this->traverse($o);
+		$descendants = array();
+		foreach($desc as $d)
+			$descendants[] = $d['o']['id'];
 		
+		return $descendants;
 	}
 	
 	// return media attached to this object
@@ -132,6 +157,11 @@ class Objects extends Model
 		return $this->get_all($fields, $tables, $where, $order);
 	}
 	
+	// returns a list of objects $o can link to
+	// $o cannot link to its children 
+	// (because it is already linked to them) 
+	// or any of its direct ancestors 
+	// (because doing so would create a loop)
 	public function unlinked_list($o)
 	{
 		$fields = array("objects.id", "objects.name1");
@@ -144,12 +174,44 @@ class Objects extends Model
 		$order 	= array("objects.name1");
 		$limit = '';
 		
-		return $this->get_all($fields, $tables, $where, $order, $limit);
+		$all = $this->traverse(0);
+		$all_ids = array();
+		foreach($all as $a)
+			$all_ids[] = $a['o']['id'];
+		
+		$exclude = $this->children($o);
+		$exclude_ids = array($o);
+		foreach($exclude as $e)
+			$exclude_ids[] = $e['id'];
+		$exclude_ids = array_merge($exclude_ids , $this->ancestors($o));
+		
+		$include_ids = array_diff($all_ids, $exclude_ids);
+		
+		return $include_ids;
 	}
 	
 	public function url_data($o)
 	{
 		
+	}
+	
+	public function traverse($o)
+	{
+		static $depth = 0;
+		$object = $this->get($o);
+		$children = $this->children($o);
+		$list = array();
+		
+		if($depth > 0)
+			$list[] = array('depth'=>$depth, 'o'=>$object);
+		if(!empty($children[0]))
+		{
+			$depth++;
+			foreach($children as $c)
+				$list = array_merge($list, $this->traverse($c['id']));
+			$depth--;
+		}
+		return $list;
 	}
 }
 ?>

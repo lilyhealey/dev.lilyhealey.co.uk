@@ -6,15 +6,15 @@ else
 	$item = $ob->get(0);
 $name = strip_tags($item["name1"]);
 
-$full = traverse(0);
-$traversed = traverse($u->id);
+$full = $ob->traverse(0);
+$traversed = $ob->traverse($u->id);
 $url_root = $admin_path.'browse';
 if($u->urls())
 	$url_root.="/".$u->urls();
 //$nav = nav($traversed, $url_root."/");
 $nav = nav($traversed, "");
-//$fullnav = nav($full, $admin_path."browse/");
-$fullnav = nav($full, "");
+$fullnav = nav($full, $admin_path."browse/");
+//$fullnav = nav($full, "");
 
 ?>
 <div id="body-container">
@@ -52,12 +52,20 @@ $fullnav = nav($full, "");
 		<div class="self-container">
 			<div class="self"><?php 
 				if($u->id) { ?>
-				<span><?php echo $name; ?></span>
+				<span><?php echo $name; 
+							print_r($ob->ancestors($u->id));
+					?></span>
 				<span>
-					<a href="<? echo $admin_path; ?>edit/<?php echo $u->urls(); ?>">edit</a>
+					[<a href="<? echo $admin_path; ?>edit/<?php echo $u->urls(); ?>">edit</a>]
 				</span>
 				<span>
-					<a href="<? echo $admin_path; ?>delete/<?php echo $u->urls(); ?>">delete</a>
+					[<a href="<? echo $admin_path; ?>delete/<?php echo $u->urls(); ?>">delete</a>]
+				</span>
+				<span>
+					[<a href="<? echo $admin_path; ?>add/<?php echo $u->urls(); ?>">add object</a>]
+				</span>
+				<span>
+					[<a href="<? echo $admin_path; ?>link/<?php echo $u->urls(); ?>">link</a>]
 				</span><?php } 
 			?></div>
 		</div>
@@ -100,9 +108,9 @@ $fullnav = nav($full, "");
 				$prevd = $d;
 			}
 		?></div>
-		<div class="actions">
+		<!--div class="actions">
 			<a href="<? echo $admin_path; ?>add/<?php echo $u->urls(); ?>">add object</a>
 			<a href="<? echo $admin_path; ?>link/<?php echo $u->urls(); ?>">link</a>
-		</div>
+		</div-->
 	</div>
 </div>

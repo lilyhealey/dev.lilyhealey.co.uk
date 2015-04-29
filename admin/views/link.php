@@ -32,10 +32,12 @@
 				<div>
 					<select name='wires_toid'><?php
 						$items = $ob->unlinked_list($u->id);
-						for($i = 0; $i < count($items); $i++)
+						foreach($items as $i)
 						{
-						?><option value="<? echo $items[$i]['id']; ?>"><?php 
-							echo $items[$i]['name1']; 
+						?><option value="<? echo $i; ?>"><?php 
+							//echo $items[$i]['name1']; 
+							echo $ob->name($i);
+							//print_r($items)
 						?></option><?php	
 						}
 					?></select>
