@@ -1,118 +1,122 @@
 <div id="body-container">
-	<div id="body" class="centre">
-		<div class="parent-container"><?php 
-			for($i = 0; $i < count($parents); $i++) 
-			{ 
-			?><div class="parent">
-				<a href="<?php echo $parents[$i]['url']; ?>"><? 
-					echo $parents[$i]['name'];
-				?></a>
-			</div><?php 
-			} 
-		?></div><?php
-		if(strtolower($r->action) != "delete") 
+	<div id="body" class="centre"><?
+		// the current object is linked elsewhere if (and only if?) it 
+		// exists in the tree (returned by $oo->traverse(0)) multiple times
+		$all_paths = $oo->traverse(0);
+		$l = 0;
+		$is_linked = false;
+		foreach($all_paths as $p)
 		{
-			//  Get ALL objects where "fromid" = this object about to be deleted
-			$children = $oo->children($uu->id);
-	
-			// determine if children have other ancestors
-			// ie, will they be orphaned after this object is deleted
-			foreach($children as &$child)
-				$child["dependent"] = TRUE;
-			$fields = array("fromid");
-			$tables = array("wires");
-			$where 	= array("active = '1'");
-			$k = 0;
-			for($i = 0; $i < count($children); $i++)
+			if(end($p) == $uu->id)
 			{
-				$where[] = "toid = '" . $children[$i]["id"] . "'";
-				$items = $ww->get_all($fields, $tables, $where);
-				for($j = 0; $j < count($items); $j++)
+				// break when second link is found
+				// no need to cycle through entire tree
+				if($l)
 				{
-					if($items[$j]["fromid"] != $uu->id)
-						$children[$i]["dependent"] = FALSE;
+					$is_linked = true;
+					break;
 				}
-				if($children[$i]["dependent"] == TRUE)
-					$k++;
+				else
+					$l++;
 			}
-		//  Display warning
-		?>
-		<div class="self-container">
-			<div class="self">WARNING!</div>
-			<div class="self">You are about to permanently delete this object.</div>
-			<div class="self">If this object is linked, the original will not be deleted.</div><?
-			if($k) 
-			{ 
-			?><div class="self">The following <? echo $k; ?> objects will also be deleted as a result: </div><?	
-			}
-		?></div><?php
-
-			$l = 0;
-			if ($k) 
+		}
+		if(strtolower($rr->submit) != "delete") 
+		{
+			// if this object does not exist elsewhere in the tree,
+			// check to see if its descendents are linked elsewhere
+			// (or will be deleted with the deletion of this object)
+			if(!$is_linked || !empty($dep_paths))
 			{
-				$padout = floor(log10($k)) + 1;
-				if ($padout < 2) 
-					$padout = 2;
-		?><div></div>
-		<div class="children-container"><?		
-				for ($i = 0; $i < count($children); $i++) 
-				{
-					$j++;
-					if ($children[$i]["dependent"] == TRUE)
+				$all_paths = $oo->traverse(0);
+				$dep_paths = $oo->traverse($uu->id);
+				$dep_prefix = implode("/", $uu->ids)."/";
+				$dp_len = strlen($dep_prefix);
+				$dep = array(); // ids only
+				$all = array(); // ids only
+				
+				foreach($dep_paths as $p)
+					$dep[] = end($p);
+				
+				// compare the beginning of $each path $p to $dep_prefix
+				// will that work?
+				foreach($all_paths as $p)
+					if(!(substr(implode("/", $p), 0, $dp_len) == $dep_prefix))
+						$all[] = end($p);
+				
+				$dependents = array_diff($dep, $all);
+				$k = count($dependents);
+			}
+		// display warning
+		?><div class="self-container"><?
+			if($is_linked)
+			{ 
+			?><p>this object is linked elsewhere, so the original will not be deleted.</p><?
+			}
+			else
+			{
+			?><p>warning! you are about to permanently delete this object.</p><?
+				if($k) 
+				{ 
+			?><p>The following <? 
+					if($k > 1)
+						echo $k." objects";
+					else
+						echo "object"; 
+					?> will also be deleted as a result:</p><?	
+					$padout = floor(log10($k)) + 1;
+					if ($padout < 2) 
+						$padout = 2;
+			?><div class="children-container"><?		
+					foreach($dependents as $d) 
 					{
+						$j++;
+						$child = $oo->get($d);
 						$n = STR_PAD($j, $padout, "0", STR_PAD_LEFT);
-						$url = $admin_path . "browse/" . $uu->urls() . "," . $children[$i]["url"];
-						$child_name = strip_tags($children[$i]["name1"]);
+						$url = $admin_path."browse/".$uu->urls()."/".$child["url"];
+						$child_name = strip_tags($child["name1"]);
 						?><div class="child">
 							<span><? echo $n; ?></span>
-							<a href="<?php echo $url; ?>"><?php echo $child_name; ?></a>
-						</div><?php
+							<a href="<? echo $url; ?>"><? echo $child_name; ?></a>
+						</div><?
 					}
+			?></div><?
 				}
-		?></div><?php
 			}
-		?><div id="form-container">
-			<form action="<? echo $admin_path.'delete/'.$uu->urls(); ?>" method="post">
+		?></div>
+		<div id="form-container">
+			<form 
+				action="<? echo $admin_path.'delete/'.$uu->urls(); ?>" 
+				method="post"
+			>
 				<div class="form">
-					<input name='action' type='hidden' value='delete'>
 					<input 
 						name='cancel' 
 						type='button' 
-						value='Cancel' 
+						value='cancel' 
 						onClick="javascript:history.back();"
 					> 
-					<input 
-						name='submit' 
-						type='submit' 
-						value='Delete Object'
-					>
+					<input name='submit' type='submit' value='delete'>
 				</div>
 			</form>
-		</div><?php
+		</div><?
 		} 
-		else 
+		else
 		{
-			//  Get wire that goes to this object to be deleted
+			//  get wire that goes to this object to be deleted
 			if (sizeof($uu->ids) < 2) 	
 				$fromid = 0;
 			else
 				$fromid = $uu->ids[sizeof($uu->ids) - 2];
-
 			$message = $ww->delete_wire($fromid, $uu->id);
-	
-			// if object has no wires to it, delete object
-			$sql = "UPDATE objects
-					SET active = '0'
-					WHERE id = $uu->id'";
-	
+			// if object doesn't exist anywhere else, deactivate it
+			if(!$is_linked)
+				$oo->deactivate($uu->id);
 		?><div class="self-container">
-			<div class="self"><?php 
-				echo $message; 
-			?></div>
+			<div class="self"><? echo $message; ?></div>
 			<div class="self">
-				<a href="<?php echo $admin_path; ?>browse/<? echo $uu->back(); ?>">continue...</a>
+				<a href="<? echo $admin_path.'browse/'.$uu->back(); ?>">continue...</a>
 			</div>
-		</div><?php
+		</div><?
 		}
 	?></div>
 </div>

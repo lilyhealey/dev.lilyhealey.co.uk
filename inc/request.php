@@ -1,5 +1,5 @@
 <?php
-
+// I'm pretty sure this entire class implementation is useless
 class Request
 {
 	public $page = ''; 	// is this variable even used?
@@ -42,5 +42,4 @@ class Request
 			$this->$v = $_POST[$v];
 	}
 }
-
 ?>

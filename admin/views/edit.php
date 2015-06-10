@@ -12,7 +12,7 @@
 	?></div>
 <?php
 $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
-if ($r->action != "update" && $uu->id)
+if ($rr->action != "update" && $uu->id)
 {
 	//  get existing image data
 	$medias = $oo->media($uu->id);
@@ -26,7 +26,8 @@ if ($r->action != "update" && $uu->id)
 	 */
 	for($i = 0; $i < $num_medias; $i++)
 	{
-		$m_padded = "" . str_pad($medias[$i]["id"], 5, "0", STR_PAD_LEFT);
+		//$m_padded = "" . str_pad($medias[$i]["id"], 5, "0", STR_PAD_LEFT);
+		$m_padded = "".m_pad($medias[$i]['id']);
 		$medias[$i]["file"] = $media_path . $m_padded . "." . $medias[$i]["type"];
 		if ($medias[$i]["type"] == "pdf")
 			$medias[$i]["display"] = $admin_path."media/pdf.png";
@@ -40,11 +41,11 @@ if ($r->action != "update" && $uu->id)
 	else
 		$item = $oo->get(0);
 	$name = strip_tags($item["name1"]);
-	?>
-	
-	<div class="self-container">
+	?><div class="self-container">
 		<div class="self">
-			<a href="<? echo $admin_path; ?>browse/<?php echo $uu->urls(); ?>"><?php echo $name; ?></a>
+			<a href="<? echo $admin_path.'browse/'.$uu->urls(); ?>"><?php 
+				echo $name; 
+			?></a>
 		</div>
 	</div>
 	<div id="form-container">
@@ -123,30 +124,17 @@ if ($r->action != "update" && $uu->id)
 					?></textarea>
 				</div><?php
 				} ?>
-				<div>
-					<input 
-						name='submit'
-						type='submit' 
-						value='Update Object'
-					>
+				<div>	
 					<input 
 						name='cancel' 
 						type='button' 
-						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls(); ?>';" 
+						value='cancel' 
+						onClick="javascript:history.back();" 
 					>
 				</div>
 				<div>
-					<input 
-						name='action' 
-						type='hidden' 
-						value='update'
-					>
-					<input
-						name='uploadsMax'
-						type='hidden'
-						value='<?php echo $j;?>'
-					>
+					<input name='submit' type='submit' value='update'>
+					<input name='action' type='hidden' value='update'>
 				</div>
 			</div>
 		</form>
@@ -160,7 +148,7 @@ else
 	/* objects */
 	$vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 	foreach($vars as $var)
-		$$var = addslashes($r->$var);
+		$$var = addslashes($rr->$var);
 
 	//  process variables
 	if (!$name1) 
@@ -200,7 +188,8 @@ else
 			$typeTemp = explode(".", $nameTemp);
 			$type = $typeTemp[sizeof($typeTemp) - 1];
 
-			$targetFile = str_pad(($m_rows+1), 5, "0", STR_PAD_LEFT) .".". $type;
+			// $targetFile = str_pad(($m_rows+1), 5, "0", STR_PAD_LEFT) .".". $type;
+			$targetFile = m_pad($m_rows+1).".".$type;
 			
 			// ** Image Resizing **
 			// Only if folder ../media/hi exists
@@ -235,7 +224,7 @@ else
 				$m_arr["object"] = "'".$uu->id."'";
 				$m_arr["created"] = "'".$dt."'";
 				$m_arr["modified"] = "'".$dt."'";
-				$m_arr["caption"] = "'".$r->captions[count($r->medias)+$i]."'";
+				$m_arr["caption"] = "'".$rr->captions[count($rr->medias)+$i]."'";
 				$mm->insert($m_arr);
 			}
 			$mflag = TRUE;
@@ -243,37 +232,34 @@ else
 	}
 	
 	// delete media
-	for ($i = 0; $i < sizeof($r->types); $i++)
+	for ($i = 0; $i < sizeof($rr->types); $i++)
 	{
 		/* 
-			Use sizeof($r->types) because if checkbox is unchecked 
+			Use sizeof($rr->types) because if checkbox is unchecked 
 			that variable "doesn't exist" although the expected behavior is 
 			for it to exist but be null.
 		*/
-		if ($r->deletes[$i]) 
+		if ($rr->deletes[$i]) 
 		{
-			$m = $r->medias[$i];
-			$ext = $r->types[$i];
-			//$killPath = $media_path;
-			//$killFile = STR_PAD($m, 5, "0", STR_PAD_LEFT) .".". $ext;
+			$m = $rr->medias[$i];
 			$mm->deactivate($m);
 			$mflag = TRUE;
 		}
 	}
 	
 	// update caption, weight, rank  
-	$num_captions = sizeof($r->captions);
-	if (sizeof($r->medias) < $num_captions)
-		$num_captions = sizeof($r->medias);
+	$num_captions = sizeof($rr->captions);
+	if (sizeof($rr->medias) < $num_captions)
+		$num_captions = sizeof($rr->medias);
 	
 	for ($i = 0; $i < $num_captions; $i++) 
 	{
 		unset($m_arr);
-		$m = $r->medias[$i];
+		$m = $rr->medias[$i];
 		$item = $mm->get($m);
 		
-		$caption = addslashes($r->captions[$i]);
-		$rank = addslashes($r->ranks[$i]);
+		$caption = addslashes($rr->captions[$i]);
+		$rank = addslashes($rr->ranks[$i]);
 
 		$z2 = NULL;
 		if ($item["caption"] != $caption)
@@ -291,10 +277,9 @@ else
 			echo "Record successfully updated."; 
 		else 
 			echo "Nothing was edited, therefore update not required.";
-		echo count($r->medias);
 		?></div>
 		<div class="self">
-			<a href="<?php echo $admin_path;?>edit/<?php echo $uu->urls(); ?>">refresh object</a>
+			<a href="<?php echo $admin_path.'edit/'.$uu->urls(); ?>">refresh object</a>
 		</div>
 	</div><?php 
 } ?></div>

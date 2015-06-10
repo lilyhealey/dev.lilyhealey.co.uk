@@ -1,74 +1,68 @@
 <div id="body-container">
-	<div id="body" class="centre">
-		<div class="parent-container"><?php 
-			for($i = 0; $i < count($parents); $i++) 
-			{ 
-			?><div class="parent">
-				<a href="<?php echo $parents[$i]['url']; ?>"><? 
-					echo $parents[$i]['name'];
-				?></a>
-			</div><?php 
-			} 
-		?></div><?php
-	if ($r->action != "link") 
+	<div id="body" class="centre"><?
+	$c_url = $admin_path."browse";
+	$l_url = $admin_path."link";
+	if($uu->urls())
 	{
-	?><div class="self-container">
-		<div class="self">
-			<a href="<? echo $admin_path; ?>browse/<?php echo $uu->urls(); ?>"><?php echo $name ?></a>
-		</div>
-		<div class="self">
-			<p>You are linking to an existing object.</p>
-			<p>The linked object will remain in its original location and also appear here.</p>
-			<p>Please choose from the list of active objects:</p>
-		</div>
-	</div>
-	<div id="form-container">
-		<form 
-			enctype="multipart/form-data" 
-			action="<? echo $admin_path; ?>link/<? echo $uu->urls(); ?>" 
-			method="post" 
-		>
-			<div class="form">
-				<div>
-					<select name='wires_toid'><?php
-						$items = $oo->unlinked_list($uu->id);
-						foreach($items as $i)
-						{
-						?><option value="<? echo $i; ?>"><?php 
-							//echo $items[$i]['name1']; 
-							echo $oo->name($i);
-							//print_r($items)
-						?></option><?php	
-						}
-					?></select>
-				</div>
-				<div>
-					<input name='action' type='hidden' value='link'>
-					<input 
-						name='cancel' 
-						type='button' 
-						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls();?>';"
-					>
-					<input name='submit' type='submit' value='Link to Object'>
-				</div>
+		$c_url .= "/".$uu->urls();
+		$l_url .= "/".$uu->urls();
+	}
+	if($rr->submit != "link") 
+	{
+		echo $l_url;
+		print_r($_POST);
+		?><div class="self-container">
+			<div class="self"><a href="<? echo $c_url; ?>"><? echo $name; ?></a></div>
+			<div class="self">
+				<p>You are linking to an existing object.</p>
+				<p>The object will remain in its original location and also appear here.</p> 
+				<p>Please choose from the list of active objects:</p>
 			</div>
-		</form>
-	</div><?php 
+		</div>
+		<div id="form-container">
+			<form 
+				enctype="multipart/form-data"
+				action="<? echo $l_url; ?>"
+				method="post" 
+			>
+				<div class="form">
+					<div>
+						<select name='wires_toid'><?
+							$items = $oo->unlinked_list($uu->id);
+							foreach($items as $i)
+							{
+							?><option value="<? echo $i; ?>"><?
+								echo $oo->name($i);
+							?></option><?	
+							}
+						?></select>
+					</div>
+					<div>
+						<input 
+							name='cancel' 
+							type='button' 
+							value='cancel' 
+							onClick="javascript:history.back();"
+						>
+						<input name='submit' type='submit' value="link">
+					</div>
+				</div>
+			</form>
+		</div><? 
 	} 
 	else 
 	{
-		/* wires */
-		$wires_toid = addslashes($r->wires_toid);
+		// create / reactivate wire 
+		// TODO:
+		// + look for an inactive wire with the same fromid and toid?
+		//   to avoid re-creating wires that are just inactive?
+		//   is this worth the computation?
+		$wires_toid = addslashes($rr->wires_toid);
 		$ww->create_wire($uu->id, $wires_toid);
 		?><div class="self-container">
-			<div class="self">
-				Object linked successfully
-			</div>
-			<div class="self">
-				<a href="<? echo $admin_path; ?>browse/<? echo $uu->urls() ?>">continue...</a>
-			</div>
-		</div><?php 
+			<div class="self">object linked successfully</div>
+			<div class="self"><a href="<? echo $c_url; ?>">continue...</a></div>
+		</div><?
 	}
 	?></div>
 </div>

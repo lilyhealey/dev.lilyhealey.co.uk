@@ -1,13 +1,25 @@
-<?php
+<?
+/*--------------------------------------------------------- 
+	class for interaction with the MEDIA table 
 
-// int: id, active, object, rank
-// float: weight
-// datetime: created, modified
-// blob: caption
-// varchar: type
+	fields
+		+ blob
+			- caption
+		+ varchar
+			- type
+		+ int
+			- id
+			- active
+			- object
+			- rank
+		+ float
+			- weight
+		+ datetime
+			- created
+			- modified
+---------------------------------------------------------*/
 class Media extends Model
 {
 	const table_name = "media";
 }
-
 ?>

@@ -1,46 +1,41 @@
 <?php
 
-class URL
-{
-	public $urls;
-	public $url;
-	public $ids;
-	public $id;
-	
+class URL extends URL_Base
+{	
 	function __construct()
 	{
 		global $oo;
 		
 		$urls = explode('/', $_SERVER['REQUEST_URI']);
+		$base = array_slice($urls, 0, 3); // == ["admin", [view]]
 		$urls = array_slice($urls, 3);
-		$this->urls = $urls;
-		$this->url = $urls[count($urls)-1];
 		
-		$ids = $oo->urls_to_ids($urls);
+		try 
+		{
+			$ids = $oo->urls_to_ids($urls);
+		}
+		// check that the object that this URL refers to exists
+		// FIX THIS CODE
+		catch(Exception $e)
+		{
+			$urls = array_slice($urls, 0, $e->getMessage());
+			$ids = $oo->urls_to_ids($urls);
+			$loc = $host.implode("/".$base)."/".implode("/", $urls);
+			header("Location: ".$loc);
+		}
 		$id = $ids[count($ids)-1];
 		if(!$id)
 			$id = 0;
 		if(sizeof($ids) == 1 && empty($ids[0]))
 			unset($ids);
+		
+		$this->urls = $urls;
+		$this->url = $urls[count($urls)-1];
 		$this->ids = $ids;
 		$this->id = $id;
 	}
 	
-	// return a string of the current urls
-	// defaults to empty string if none
-	public function urls()
-	{
-		return implode("/", $this->urls);
-	}
-	
-	public function back()
-	{
-		$urls = $this->urls;
-		array_pop($urls);
-		return implode("/", $urls);
-		// return $url;
-	}
-	
+	// FIX THIS CODE
 	public function parents()
 	{
 		global $oo;

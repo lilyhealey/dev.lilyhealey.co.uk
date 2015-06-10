@@ -15,35 +15,11 @@ $oo = new Objects();
 $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
-$r = new Request();
-
-// Check that selected object exists
-// if ($uu->id && is_numeric($uu->id))
-// {
-// 	$item = $oo->get($uu->id);
-// 	
-// 	if (!$oo->active($uu->id)) 
-// 	{
-// 		$url = "";
-// 		for ($i = 0; $i < sizeof($uu->ids)-1; $i++) 
-// 		{
-// 			if($i == 0)
-// 				$url .= "?object=" . $uu->ids[$i];
-// 			if($i < sizeof($uu->ids)-2) 
-// 				$url .= ",";
-// 		}
-// 		header("location:". $admin_path ."browse.php". $url);
-// 	}
-// 	$name = $item["name1"];
-// 	$title = $name;
-// }
+$rr = new Request();
 
 // parents
-//$parents = $oo->parents($uu->ids);
 $parents = $uu->parents();
 
-// $uu = $oo->objects_to_url($r->objects);
-// print_r($u);
 // self
 if($uu->id)
 	$item = $oo->get($uu->id);
@@ -58,25 +34,58 @@ if ($title)
 	$title = $db_name ." | ". $title;
 else
 	$title = $db_name;
-	
 
-?>
-<!DOCTYPE html>
+//$flat = $oo->traverse(0);
+//$nav = nav($flat, $uu->ids);
+$nav = $oo->nav($uu->ids);
+?><!DOCTYPE html>
 <html>
 	<head>
 		<title><?php echo $title; ?></title>
 		<meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8">
-		<meta http-equiv="Title" content="<?php echo $documentTitle; ?>">
-		<meta name="description" content="Open Records Generator 2.0">
+		<meta name="description" content="anglophile">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
 		<link rel="shortcut icon" href="<? echo $admin_path;?>media/icon.png">
 		<link rel="apple-touch-icon-precomposed" href="<? echo $admin_path;?>media/icon.png">
-		<link rel="stylesheet" href="<? echo $admin_path; ?>static/global.css">
+		<link rel="stylesheet" href="<? echo $admin_path; ?>static/main.css">
 	</head>
 	<body>
 		<div id="page">
 			<div id="header-container">
-				<div id="header" class="centre">
-					<a href="<?php echo $admin_path; ?>browse"><?php 
+				<header class="centre">
+					<div>
+						<span id="date"><?php 
+							echo strtolower(date("l, d M Y H:i (T)")); 
+						?></span>
+					</div>
+					<div id="nav">
+						<a href="<?php echo $admin_path; ?>browse"><?php 
 						echo $db_name ?> db</a>
-				</div>
+						<div class="nav-level"><?
+						$prevd = $nav[0]['depth'];
+						foreach($nav as $n)
+						{
+							$d = $n['depth'];
+							if($d > $prevd)
+							{
+							?><div class="nav-level"><?
+							}
+							else
+							{
+								for($i = 0; $i < $prevd - $d; $i++)
+								{
+								?></div><?
+								}
+							}
+							?><div>
+								<a href="<? echo $admin_path.'browse/'.$n['url']; ?>"><?
+									echo $d.". ".$n['name'];
+								?></a>
+							</div><?
+							$prevd = $d;
+						}
+						?></div>
+					</div>
+				</header>
 			</div>

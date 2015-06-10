@@ -1,4 +1,10 @@
 <?
+/*
+	generic class for interaction with O-R-G database tables:
+	+ objects
+	+ wires
+	+ media
+*/
 class Model
 {
 	// takes: $id of database entry
@@ -7,7 +13,7 @@ class Model
 	{
 		global $db;
 		if(!is_numeric($id))
-			throw new Exception('Id not numeric.');
+			throw new Exception('id not numeric.');
 		$sql = "SELECT * 
 				FROM " . static::table_name . " 
 				WHERE id = $id
@@ -54,19 +60,28 @@ class Model
 		return $items;
 	}
 	
+	// inserts a new row into the db
+	// $arr is an associative array of col => value
+	// 
+	// TODO:
+	// + VERIFY INPUTS
 	public static function insert($arr)
 	{
-		global $db; 
-		
+		global $db;
 		$keys = implode(", ", array_keys($arr));
 		$values = implode(", ", array_values($arr));
 		$sql = "INSERT INTO " . static::table_name . " (";
 		$sql .= $keys . ") VALUES(" . $values . ")";
-		
 		$db->query($sql); 
 		return $db->insert_id;
 	}
 	
+	// updates a row of the db associated with a particular $id
+	// $id is the id of the object / wire / media to be updated
+	// $arr is an associative array of col => value
+	// 
+	// TODO:
+	// + VERIFY INPUTS
 	public static function update($id, $arr)
 	{
 		global $db;
@@ -76,13 +91,12 @@ class Model
 		$sql = "UPDATE ".static::table_name." 
 				SET ".$z."
 				WHERE id = '".$id."'";
-		
 		$db->query($sql);
-		
 		return $sql;
 	}
 	
-	// set active to 0
+	// deactivate row with id = $id
+	// ie, set active to 0 
 	public function deactivate($id)
 	{
 		global $db;
@@ -96,17 +110,21 @@ class Model
 				WHERE id = '$id'";
 		
 		if($db->query($sql) === TRUE)
-			return "Record deleted sucessfully.";
+			return "record deleted sucessfully";
 		else
 			return "error: " . $db->error;
 	}
 	
+	// returns true if the row associated with $id is active, 
+	// false if not
 	public function active($id)
 	{
 		$item = $this->get($id);
 		return $item["active"] == 1;
 	}
 	
+	// returns the number of rows in the table associated with
+	// this object
 	public function num_rows()
 	{
 		global $db;

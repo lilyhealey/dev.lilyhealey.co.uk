@@ -1,32 +1,17 @@
 <?
-
-$t = 0;
-
 $oarr = $oo->get($uu->id);
-
-?>
-<div>leh</div>
-<div><? print_r($oarr); ?></div>
-<div><? 
-$list = $oo->traverse(0);
-$list2 = nav($list, "");
-//print_r($list);
-$urls = array();
-$prevd = 0;
-$t = "&nbsp;&nbsp;&nbsp;&nbsp;";
-foreach($list2 as $o)
+$okeys = array("name1", "body", "deck");
+$marr = $oo->media($uu->id);
+?><section id="body"><?
+foreach($okeys as $k)
 {
-	$d = $o['depth'];
-	$tab = "";
-	for($i = 1; $i < $d; $i++)
-		$tab.= $t;
-?><div><?
-	//echo $d.". ";
-	echo $tab;
-?><a href="<? echo $host.$o['url']; ?>"><?
-	echo $o['name']." ";
-?></a><?
+?><div id="<? echo $k; ?>"><? 
+	echo $oarr[$k]; 
 ?></div><?
-	$prevd = $d;
+} 
+foreach($marr as $m)
+{
+	$mfile = m_url($m);
+	?><div><img src="<? echo $mfile;?>"></div><?
 }
-?></div>
+?></section>

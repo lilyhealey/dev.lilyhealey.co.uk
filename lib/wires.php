@@ -1,9 +1,21 @@
-<?php
-
-// int: id, active, fromid, toid
-// float: weight
-// datetime: created, modified
-// blob: notes
+<?
+/*--------------------------------------------------------- 
+	class for interaction with the WIRES table 
+	
+	fields
+	+ blob
+		- notes
+	+ int
+		- id
+		- active
+		- fromid
+		- toid
+	+ float
+		- weight
+	+ datetime
+		- created
+		- modified
+---------------------------------------------------------*/
 class Wires extends Model
 {
 	const table_name = "wires";
@@ -18,8 +30,30 @@ class Wires extends Model
 		$order 	= array();
 		$limit 	= '1';
 		
-		$items = $this->get_all($fields, $tables, $where, $order, $limit);
-		return $items[0];
+		$wire = $this->get_all($fields, $tables, $where, $order, $limit);
+		return $wire[0];
+	}
+	
+	public function get_wires_to($toid)
+	{
+		$fields = array("*");
+		$tables = array(static::table_name);
+		$where  = array("toid = '".$toid."'", 
+						"active = '1'");
+		$order = array();
+		$wires = $this->get_all($fields, $tables, $where, $order);
+		return $wires;
+	}
+	
+	public function get_wires_from($fromid)
+	{
+		$fields = array("*");
+		$tables = array(static::table_name);
+		$where  = array("fromid = '".$fromid."'", 
+						"active = '1'");
+		$order = array();
+		$wires = $this->get_all($fields, $tables, $where, $order);
+		return $wires;
 	}
 	
 	public function delete_wire($fromid, $toid)

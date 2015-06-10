@@ -1,48 +1,61 @@
 <?php
-
-class URL
-{
-	public $urls;
-	public $url;
-	public $ids;
-	public $id;
-	
+/* 
+	class for dealing with URLS	
+*/
+class URL extends URL_Base
+{	
 	function __construct()
 	{
 		global $oo;
-		global $db;
-		
 		$urls = explode('/', $_SERVER['REQUEST_URI']);
 		$urls = array_slice($urls, 1);
-		$this->urls = $urls;
-		$this->url = $urls[count($urls)-1];
 		
-		$ids = $oo->urls_to_ids($urls);
+		// check that the object that this URL refers to exists
+		try
+		{
+			$ids = $oo->urls_to_ids($urls);
+		}
+		catch(Exception $e)
+		{
+			$urls = array_slice($urls, 0, $e->getMessage());
+			$ids = $oo->urls_to_ids($urls);
+			if($urls)
+				header("Location: ".$host."/".implode("/", $urls));
+		}
 		$id = $ids[count($ids)-1];
 		if(!$id)
 			$id = 0;
 		if(sizeof($ids) == 1 && empty($ids[0]))
 			unset($ids);
+			
+		$this->urls = $urls;
+		$this->url = $urls[count($urls)-1];
 		$this->ids = $ids;
 		$this->id = $id;
 	}
 	
-	public function urls()
+	public function parents()
 	{
 		global $oo;
-		$urls = $oo->ids_to_urls($this->ids);
-		$url = implode("/", $urls);
-		return $url;
-	}
-	
-	public function back()
-	{
-		global $oo;
+		global $admin_path;
+		$urls = $this->urls;
 		$ids = $this->ids;
-		array_pop($ids);
-		$urls = $oo->ids_to_urls($ids);
-		$url = implode("/", $urls);
-		return $url;
+		$parents[] = "";
+		
+		for($i = 0; $i < count($urls)-1; $i++)
+		{
+			$parents[$i]['url'] = $admin_path."browse/";
+			for($j = 0; $j < $i + 1; $j++)
+			{
+				$parents[$i]['url'].= $urls[$j];
+				if($j < $i)
+					$parents[$i]['url'].= "/";
+			}
+			$parents[$i]["name"] = $oo->name($ids[$i]);
+		}
+		if($parents[0] == "")
+			unset($parents);
+		return $parents;
 	}
 }
 

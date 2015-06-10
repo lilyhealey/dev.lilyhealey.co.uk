@@ -7,7 +7,7 @@
 				<a href="http://www.o-r-g.com/" target="_blank">O R G inc.</a>
 			</div>
 		</div>
-		<textarea cols="60" rows="16">
+		<textarea class="large">
 OPEN-RECORDS-GENERATOR can accommodate all standards-compliant HTML tags. This includes basic markup, advanced formatting and embedding. The most common HTML tags are provided here for copy-paste reference:
 
 <i>words here appear in italics</i>
@@ -114,6 +114,8 @@ NO WARRANTY
 
 END OF TERMS AND CONDITIONS
 			</textarea> 
-		<div class="actions"><a href="javascript:history.back();">&lt; return</a></div>
+		<div class="actions">
+			<a href="javascript:history.back();">&lt; return</a>
+		</div>
 	</div>
 </div>

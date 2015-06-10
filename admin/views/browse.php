@@ -1,114 +1,46 @@
-<?php
-
-if($uu->id)
-	$item = $oo->get($uu->id);
-else
-	$item = $oo->get(0);
-$name = strip_tags($item["name1"]);
-
-$full = $oo->traverse(0);
-$traversed = $oo->traverse($uu->id);
-$url_root = $admin_path.'browse';
-if($uu->urls())
-	$url_root.="/".$uu->urls();
-//$nav = nav($traversed, $url_root."/");
-$nav = nav($traversed, "");
-$fullnav = nav($full, $admin_path."browse/");
-//$fullnav = nav($full, "");
-
-?>
-<div id="body-container">
-	<div id="nav" class="centre"><?
-		$t = "&nbsp;&nbsp;&nbsp;&nbsp;";
-		$prevd = $fullnav[0]['depth'];
-		foreach($fullnav as $n)
+<?
+// am i using the ternary operator correctly?
+// if this url has an id, get the associated object,
+// else, get the roote object
+$item = $uu->id ? $oo->get($uu->id) : $oo->get(0);
+$name = $item ? strip_tags($item["name1"]) : "root";
+?><div id="body-container">
+	<div id="body" class="centre">
+		<div class="actions"><?
+			if($item)
+			{
+			?><span><? echo $name; ?></span>
+			<a href="<? echo $admin_path."edit/".$uu->urls(); ?>">edit</a>
+			<a href="<? echo $admin_path."delete/".$uu->urls(); ?>">delete</a>
+			<?
+			}
+			?>
+			<a href="<? echo $admin_path."add/".$uu->urls(); ?>">add</a>
+			<a href="<? echo $admin_path."link/".$uu->urls(); ?>">link</a>
+		</div><?
+		// object contents
+		if($uu->id)
 		{
-			$d = $n['depth'];
-// 			if($d > $prevd)
-// 				continue;
-			$tab = "";
-			for($i = 1; $i < $d; $i++)
-				$tab.= $t;
-			?><div><?
-				echo $tab;
-				?><a href="<? echo $n['url']; ?>"><?
-					echo $n['name'];
-				?></a>
-			</div><?
-			$prevd = $d;
+			$item = $oo->get($uu->id);
+			$keys = array_keys($item);
+			foreach($keys as $k)
+			{
+				if($item[$k])
+				{
+				?><div>
+					<span><? echo $k; ?>: </span>
+					<span><? echo $item[$k]; ?></span>
+				</div><?
+				}
+			}
+			$media_ids = $oo->media_ids($uu->id);
+			foreach($media_ids as $m)
+			{
+				$m_url = m_url($mm->get($m));
+				?><div class='preview'>
+					<img src="<? echo $m_url; ?>">
+				</div><?
+			}
 		}
 	?></div>
-	<div id="body" class="centre">
-		<div class="parent-container"><?php 
-			for($i = 0; $i < count($parents); $i++) 
-			{ 
-			?><div class="parent">
-				<a href="<?php echo $parents[$i]['url']; ?>"><? 
-					echo $parents[$i]['name'];
-				?></a>
-			</div><?php 
-			} 
-		?></div>
-		<div class="self-container">
-			<div class="self"><?php 
-				if($uu->id) { ?>
-				<span><?php echo $name;?></span>
-				<span>
-					[<a href="<? echo $admin_path; ?>edit/<?php echo $uu->urls(); ?>">edit</a>]
-				</span>
-				<span>
-					[<a href="<? echo $admin_path; ?>delete/<?php echo $uu->urls(); ?>">delete</a>]
-				</span>
-				<span>
-					[<a href="<? echo $admin_path; ?>add/<?php echo $uu->urls(); ?>">add object</a>]
-				</span>
-				<span>
-					[<a href="<? echo $admin_path; ?>link/<?php echo $uu->urls(); ?>">link</a>]
-				</span><?php } 
-			?></div>
-		</div>
-		<div class="children-container"><?php
-			$t = "&nbsp;&nbsp;&nbsp;&nbsp;";
-			$prevd = $nav[0]['depth'];
-			$count = 0;
-			for($i = 0; $i < count($nav); $i++)
-			{
-				$d = $nav[$i]['depth'];
-				if($d > $prevd)
-					continue;
-				$tab = "";
-				for($j = 1; $j < $d; $j++)
-					$tab.= $t;
-			?><div class="child">
-				<span><? echo ++$count; ?></span>
-				<span><?
-					echo $tab;
-					$url_root = $admin_path."browse";
-					if($uu->urls())
-						$url_root.="/".$uu->urls();
-					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>"><?
-						echo $nav[$i]['name'];
-					?></a>
-				</span>
-				<span><?
-					$url_root = $admin_path."edit";
-					if($uu->urls())
-						$url_root.="/".$uu->urls();
-					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">edit</a>
-				</span>
-				<span><?
-					$url_root = $admin_path."delete";
-					if($uu->urls())
-						$url_root.="/".$uu->urls();
-					?><a href="<? echo $url_root."/".$nav[$i]['url']; ?>">delete</a>
-				</span>
-			</div><?
-				$prevd = $d;
-			}
-		?></div>
-		<!--div class="actions">
-			<a href="<? echo $admin_path; ?>add/<?php echo $uu->urls(); ?>">add object</a>
-			<a href="<? echo $admin_path; ?>link/<?php echo $uu->urls(); ?>">link</a>
-		</div-->
-	</div>
 </div>

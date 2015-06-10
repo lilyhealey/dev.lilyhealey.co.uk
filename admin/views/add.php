@@ -11,15 +11,18 @@
 			} 
 		?></div><?php
 			$vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
-			if($r->action != "add") 
+			if($rr->action != "add") 
 			{
+				$form_url = $admin_path."add";
+				if($uu->urls())
+					$form_url.="/".$uu->urls();
 		?><div class="self-container">
 			<div class="self">You are adding a new object.</div>
 		</div>
 		<div id="form-container">
 			<form 
 				enctype="multipart/form-data" 
-				action="<?php echo $admin_path ."add/". $uu->urls(); ?>" 
+				action="<? echo $form_url; ?>" 
 				method="post"
 			>
 				<div id="form"><?php
@@ -44,18 +47,12 @@
 				?></div>
 				<div>
 					<input 
-						name='submit' 
-						type='submit' 
-						value='Add Object'
-					>
-					<input 
 						name='cancel' 
 						type='button' 
-						value='Cancel' 
-						onClick="javascript:location.href='<? echo $admin_path."browse/".$uu->urls();?>';"
-					> 
-				</div>
-				<div>
+						value='cancel' 
+						onClick="javascript:history.back();"
+					>
+					<input name='submit' type='submit' value='add'>
 					<input name='action' type='hidden' value='add'>
 				</div>
 			</form>
@@ -66,7 +63,7 @@
 				/* objects */
 				$vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 				foreach($vars as $var)
-					$$var = addslashes($r->$var);
+					$$var = addslashes($rr->$var);
 	
 				//  Process variables
 				if (!$name1) 
@@ -90,7 +87,10 @@
 				unset($arr);
 		
 				/* wires */
-				$fromid = $uu->id;
+				if($uu->id)
+					$fromid = $uu->id;
+				else
+					$fromid = 0;
 				$arr["created"] = "'".$dt."'";
 				$arr["modified"] = "'".$dt."'";
 				$arr["fromid"] = "'".$fromid."'";
@@ -99,6 +99,7 @@
 				$ww->insert($arr);
 
 				/* media */
+				// this code should be factored
 				for ($i = 0; $i < $max_uploads; $i++) 
 				{
 					if ($imageName = $_FILES["upload".$i]["name"]) 
@@ -109,7 +110,8 @@
 						$typeTemp = explode(".", $nameTemp);
 						$type = $typeTemp[sizeof($typeTemp) - 1];
 				
-						$targetFile = str_pad(($m_rows+1), 5, "0", STR_PAD_LEFT) .".". $type;				
+						// $targetFile = str_pad(($m_rows+1), 5, "0", STR_PAD_LEFT) .".". $type;
+						$targetFile = m_pad($m_rows+1).".". $type;				
 
 						// ** Image Resizing **
 						// Only if folder ../media/hi exists
@@ -153,7 +155,7 @@
 				<p>Object added successfully.</p>
 			</div>
 			<div class="self">
-				<a href="<? echo $admin_path; ?>browse/<? echo $uu->urls(); ?>">continue... </a>
+				<a href="<? echo $admin_path.'browse/'.$uu->urls(); ?>">continue... </a>
 			</div>
 		</div><?php 
 			} 

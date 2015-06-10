@@ -1,0 +1,104 @@
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+ 
+html {
+	font-family: "Helvetica Neue", Helvetica, "Menlo", monospace;
+	font-size: 11px;
+	-webkit-font-smoothing: subpixel-antialiased; /* safari can't handle fonts */
+	color: #000;
+	background-color: #252525;
+}
+
+body {
+	max-width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+textarea {
+	font-family: inherit;
+	color: #fff;
+	background-color: #111;
+	border: 0px;
+	padding: 10px;
+	resize: none;
+}
+
+textarea.large {
+	height: 80vh;
+}
+
+.form > div {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+/* link styles */
+a:link {
+	text-decoration: none;
+	color: #8000ff;
+}
+
+a:visited {
+	color: #8000ff;
+}
+
+a:hover {
+	color: #fff;
+}
+
+a:active {
+}
+
+a::before {
+	/*content: "[";*/
+}
+
+a::after {
+	/*content: "]";*/
+}
+
+img, textarea {
+	width: 100%;
+}
+
+#page > div{
+	padding: 10px;
+}
+
+#header-container {
+	background-color: #fff;
+}
+
+#body-container {
+	background-color: #eee;
+}
+
+#footer-container {
+	background-color: #ddd;
+}
+
+#nav {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	padding: 10px;
+	background-color: #aaa;
+	width: 25%;
+}
+
+.nav-level {
+	padding-left: 2ch;
+}
+
+#header:first-child {
+}
+
+.button {
+	/* cursor: pointer;*/
+ }

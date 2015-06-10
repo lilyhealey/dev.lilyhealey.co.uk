@@ -13,33 +13,8 @@ $oo = new Objects();
 $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
-$r = new Request();
+// $rr = new Request();
 
-if ($uu->id && is_numeric($uu->id))
-{
-	$item = $oo->get($uu->id);
-	
-	if (!$oo->active($uu->id)) 
-	{
-		$url = "";
-		for ($i = 0; $i < sizeof($uu->ids)-1; $i++) 
-		{
-			if($i == 0)
-				$url .= "?object=" . $uu->ids[$i];
-			if($i < sizeof($uu->ids)-2) 
-				$url .= ",";
-		}
-		header("location:". $admin_path ."browse.php". $url);
-	}
-	$name = $item["name1"];
-	$title = $name;
-}
-
-// parents
-$parents = $oo->parents($uu->ids);
-
-// $uu = $oo->objects_to_url($r->objects);
-// print_r($u);
 // self
 if($uu->id)
 	$item = $oo->get($uu->id);
@@ -56,13 +31,39 @@ if ($title)
 else
 	$title = $db_name;
 
+$nav = $oo->nav($uu->ids);
 
 ?><!DOCTYPE html>
 <html>
 	<head>
 		<title><? echo $title; ?></title>
 		<link rel="shortcut icon" href="<? echo $host;?>static/icon.png">
+		<link rel="stylesheet" href="<? echo $host; ?>static/main.css">
 	</head>
 	<body>
 		<div id="page">
-		
+			<header>
+				<h1><a href="<? echo $host; ?>">lily healey</a></h1>
+				<ul><?
+				$prevd = $nav[0]['depth'];
+				foreach($nav as $n)
+				{
+					$d = $n['depth'];
+					if($d > $prevd)
+					{
+					?><ul class="nav-level"><?
+					}
+					else
+					{
+						for($i = 0; $i < $prevd - $d; $i++)
+						{ ?></ul><? }
+					}
+					?><li>
+						<a href="<? echo $host.$n['url']; ?>"><?
+							echo $n['name'];
+						?></a>
+					</li><?
+					$prevd = $d;
+				}
+				?></ul>
+			</header>
