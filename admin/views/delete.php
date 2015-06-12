@@ -17,7 +17,7 @@
 					break;
 				}
 				else
-					$l++;
+					$l++; 
 			}
 		}
 		if(strtolower($rr->submit) != "delete") 

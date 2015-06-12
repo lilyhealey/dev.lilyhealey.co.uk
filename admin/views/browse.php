@@ -1,15 +1,10 @@
-<?
-// am i using the ternary operator correctly?
-// if this url has an id, get the associated object,
-// else, get the roote object
-$item = $uu->id ? $oo->get($uu->id) : $oo->get(0);
-$name = $item ? strip_tags($item["name1"]) : "root";
-?><div id="body-container">
+<div id="body-container">
 	<div id="body" class="centre">
+		<span><? echo $name; ?></span>
 		<div class="actions"><?
 			if($item)
 			{
-			?><span><? echo $name; ?></span>
+			?>
 			<a href="<? echo $admin_path."edit/".$uu->urls(); ?>">edit</a>
 			<a href="<? echo $admin_path."delete/".$uu->urls(); ?>">delete</a>
 			<?
@@ -19,10 +14,10 @@ $name = $item ? strip_tags($item["name1"]) : "root";
 			<a href="<? echo $admin_path."link/".$uu->urls(); ?>">link</a>
 		</div><?
 		// object contents
-		if($uu->id)
+		if($item)
 		{
-			$item = $oo->get($uu->id);
-			$keys = array_keys($item);
+			//$keys = array_keys($item);
+			$keys = ["id", "name1", "url"];
 			foreach($keys as $k)
 			{
 				if($item[$k])

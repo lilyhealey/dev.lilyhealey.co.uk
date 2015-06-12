@@ -60,7 +60,7 @@ $nav = $oo->nav($uu->ids);
 					}
 					?><li>
 						<a href="<? echo $host.$n['url']; ?>"><?
-							echo $n['name'];
+							echo $n['o']['name1'];
 						?></a>
 					</li><?
 					$prevd = $d;

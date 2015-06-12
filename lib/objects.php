@@ -75,6 +75,26 @@ class Objects extends Model
 		return $ids;
 	}
 	
+	public function siblings($o)
+	{
+		$all = $this->traverse(0);
+		$siblings = array();
+		
+		for($i = 0; $i < count($all); $i++)
+		{
+			if(end($all[$i]) == $o)
+			{
+				$p = (count($all[$i]) > 1) ? $all[$i][count($all[$i])-2] : 0;
+				$s = $this->children_ids($p);
+				$siblings = array_merge($siblings, $s);
+			}
+		}
+		$siblings = array_unique($siblings);
+		$k = array_search($o, $siblings);
+		unset($siblings[$k]);
+		return  $siblings;
+	}
+	
 	// check that URL is of valid object here
 	// throw 404 exception if not
 	public function urls_to_ids($u)
@@ -235,14 +255,16 @@ class Objects extends Model
 			$urls[] = $o['url'];
 			$url = implode("/", $urls);
 		
-			$nav[] = array('depth'=>$d, 'name'=>$o['name1'], 'url'=>$url);
+			$nav[] = array('depth'=>$d, 'o'=>$o, 'url'=>$url);
 			$prevd = $d;
 		}
 		return $nav;
 	}
 	
 	// takes: 
-	// returns: 
+	// returns:
+	// if end($ids) is a leaf (has no siblings), then return the siblings with the
+	// tree
 	public function nav($ids, $root=0)
 	{
 		$nav = array();
@@ -252,34 +274,107 @@ class Objects extends Model
 		{
 			$o = $this->get($t);
 			$d = $root+1;
-			$nav[] = array('depth'=>$d, 'name'=>$o['name1'], 'url'=>$o['url']);
+			$urls = array($o['url']);
+			$url = implode("/", $urls);			
+			$nav[] = array('depth'=>$d, 'o'=>$o, 'url'=>$url);
+			
 			if($pass && $t == $ids[$root])
 			{
-				$urls = array($o['url']);
+				$pass = false; // short-circuit if statement
+
 				$kids = $this->children_ids(end($ids));
+				if(empty($kids) && count($ids) > 1)
+				{
+					$kids = $this->children_ids($ids[count($ids)-2]);
+					array_pop($ids); // leaf is included in siblings
+				}
 				array_shift($ids);
+				
+				// show direct ancestors (and self, if children)
 				foreach($ids as $id)
 				{
 					$d++;
 					$o = $this->get($id);
 					$urls[] = $o['url'];
 					$url = implode("/", $urls);
-					$nav[] = array('depth'=>$d, 'name'=>$o['name1'], 'url'=>$url);
+					$nav[] = array('depth'=>$d, 'o'=>$o, 'url'=>$url);
 				}
-				//kids
+				// show children, if no children, show self + siblings
 				$d++;
 				foreach($kids as $k)
 				{	
 					$o = $this->get($k);
 					$urls[] = $o['url'];
 					$url = implode("/", $urls);
-					$nav[] = array('depth'=>$d, 'name'=>$o['name1'], 'url'=>$url);
+					$nav[] = array('depth'=>$d, 'o'=>$o, 'url'=>$url);
 					array_pop($urls);
 				}
-				$pass = false; // short-circuit if statement
 			}
 		}
 		return $nav;
+	}
+	
+	function nav_helper($type, $id, $d, &$urls)
+	{
+		$o = $this->get($id);
+		$urls[] = $o['url'];
+		$url = implode("/", $urls);
+		return array('type'=>$type, 'id'=>$id,'o'=>$o,'depth'=>$d,'url'=>$url);
+	}
+	
+	public function nav_clean($ids)
+	{
+		$records = array();
+		$top = $this->children_ids(0);
+		$pass = true;
+		foreach($top as $t_id)
+		{
+			$d = 1;
+			$urls = array();
+			// if this top-level object is an ancestor of the current obj		
+			if($pass && $t_id == $ids[0])
+			{
+				$pass = false; // short-circuit if statement
+				$s_id = array_pop($ids);
+				
+				// parents
+				foreach($ids as $p_id)
+					$records[] = $this->nav_helper("parent", $p_id, $d++, $urls);
+				
+				$kids = $this->children_ids($s_id);
+				// self + siblings
+				if(empty($kids))
+				{
+					if(count($ids))
+					{
+						$siblings = $this->children_ids(end($ids));
+						foreach($siblings as $sib)
+						{
+							if($sib == $s_id)
+								$records[] = $this->nav_helper("self", $sib, $d, $urls);
+							else
+								$records[] = $this->nav_helper("sibling", $sib, $d, $urls);
+							array_pop($urls);
+						}
+					}
+					else
+						$records[] = $this->nav_helper("self", $s_id, $d, $urls);
+				}
+				// self + kids
+				else
+				{
+					$records[] = $this->nav_helper("self", $s_id, $d++, $urls);
+					foreach($kids as $k_id)
+					{
+						$records[] = $this->nav_helper("child", $k_id, $d, $urls);
+						array_pop($urls);
+					}
+				}
+			}
+			else
+				$records[] = $this->nav_helper("top", $t_id, $d, $urls);
+		}
+		return $records;
 	}
 }
 ?>

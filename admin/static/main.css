@@ -7,17 +7,28 @@
 html {
 	font-family: "Helvetica Neue", Helvetica, "Menlo", monospace;
 	font-size: 11px;
-	-webkit-font-smoothing: subpixel-antialiased; /* safari can't handle fonts */
+	/* safari can't handle fonts */
+	-webkit-font-smoothing: subpixel-antialiased;
 	color: #000;
 	background-color: #252525;
 }
 
 body {
-	max-width: 50%;
+	width: 500px;
+	max-width: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 0px;
 	margin-bottom: 0px;
+	z-index: 1;
+}
+
+/* forms */
+.form > div {
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 textarea {
@@ -25,7 +36,7 @@ textarea {
 	color: #fff;
 	background-color: #111;
 	border: 0px;
-	padding: 10px;
+	padding: 5px;
 	resize: none;
 }
 
@@ -33,24 +44,41 @@ textarea.large {
 	height: 80vh;
 }
 
-.form > div {
-	margin-left: 10px;
-	margin-right: 10px;
+textarea.medium {
 }
 
-/* link styles */
-a:link {
-	text-decoration: none;
-	color: #8000ff;
+textarea.small {
 }
 
+textarea.caption {
+	width: 50%;
+  	height: 21px;
+  	display: block;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+}
+
+img, textarea {
+	width: 100%;
+}
+
+/* links */
+a:link, 
 a:visited {
-	color: #8000ff;
+	text-decoration: none;
+	color: #ff0000;
 }
 
-a:hover {
-	color: #fff;
+.highlight a:link, 
+.highlight a:visited {
+	color: #39cf7c;
 }
+
+a:hover,
+.highlight a:hover {
+	color: #ffff00;
+}
+
 
 a:active {
 }
@@ -63,16 +91,13 @@ a::after {
 	/*content: "]";*/
 }
 
-img, textarea {
-	width: 100%;
-}
-
 #page > div{
 	padding: 10px;
 }
 
 #header-container {
-	background-color: #fff;
+	background-color: #000;
+	color: #fff;
 }
 
 #body-container {
@@ -82,23 +107,28 @@ img, textarea {
 #footer-container {
 	background-color: #ddd;
 }
-
+#date-container {
+	position: relative;
+}
+#date {
+	position: absolute;
+	right: 0px;
+}
 #nav {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	padding: 10px;
-	background-color: #aaa;
-	width: 25%;
+	/*padding: 10px;*/
+	z-index: -1;
 }
 
+.preview {
+	width: 460px;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
 .nav-level {
 	padding-left: 2ch;
 }
 
 #header:first-child {
 }
-
-.button {
-	/* cursor: pointer;*/
- }

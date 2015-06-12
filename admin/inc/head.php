@@ -21,31 +21,24 @@ $rr = new Request();
 $parents = $uu->parents();
 
 // self
-if($uu->id)
-	$item = $oo->get($uu->id);
-else
-	$item = $oo->get(0);
-$name = strip_tags($item["name1"]);
+$item = $oo->get($uu->id);
+
+// am i using the ternary operator correctly?
+// if this url has an id, get the associated object,
+// else, get the root object
+$name = $item ? strip_tags($item["name1"]) : "root";
 
 // document title
-$item = $oo->get($uu->id);
-$title = $item["name1"];
-if ($title)
-	$title = $db_name ." | ". $title;
-else
-	$title = $db_name;
+$title = $db_name." | ".$name;
 
-//$flat = $oo->traverse(0);
-//$nav = nav($flat, $uu->ids);
-$nav = $oo->nav($uu->ids);
+$nav = $oo->nav_clean($uu->ids);
 ?><!DOCTYPE html>
 <html>
 	<head>
 		<title><?php echo $title; ?></title>
-		<meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8">
+		<meta charset="utf-8">
 		<meta name="description" content="anglophile">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
 		<link rel="shortcut icon" href="<? echo $admin_path;?>media/icon.png">
 		<link rel="apple-touch-icon-precomposed" href="<? echo $admin_path;?>media/icon.png">
 		<link rel="stylesheet" href="<? echo $admin_path; ?>static/main.css">
@@ -54,7 +47,7 @@ $nav = $oo->nav($uu->ids);
 		<div id="page">
 			<div id="header-container">
 				<header class="centre">
-					<div>
+					<div id="date-container">
 						<span id="date"><?php 
 							echo strtolower(date("l, d M Y H:i (T)")); 
 						?></span>
@@ -67,6 +60,7 @@ $nav = $oo->nav($uu->ids);
 						foreach($nav as $n)
 						{
 							$d = $n['depth'];
+							$t = $n['type'];
 							if($d > $prevd)
 							{
 							?><div class="nav-level"><?
@@ -78,9 +72,17 @@ $nav = $oo->nav($uu->ids);
 								?></div><?
 								}
 							}
-							?><div>
+							if($t == "parent" || $t == "self")
+							{
+							?><div class="highlight"><?
+							}
+							else
+							{
+							?><div><?
+							}
+							?>
 								<a href="<? echo $admin_path.'browse/'.$n['url']; ?>"><?
-									echo $d.". ".$n['name'];
+									echo $n['o']['name1'];
 								?></a>
 							</div><?
 							$prevd = $d;

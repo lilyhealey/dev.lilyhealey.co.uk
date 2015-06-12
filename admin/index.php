@@ -4,7 +4,7 @@
 // views are in folder ./views
 $uri = explode('/', $_SERVER['REQUEST_URI']);
 $view = "views/";
-$view.= $uri[2] ? $uri[2]: "cover";
+$view.= $uri[2] ? $uri[2]: "browse";
 $view.= ".php";
 
 try

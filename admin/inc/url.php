@@ -36,6 +36,7 @@ class URL extends URL_Base
 	}
 	
 	// FIX THIS CODE
+	// this probably belongs somewhere else
 	public function parents()
 	{
 		global $oo;
