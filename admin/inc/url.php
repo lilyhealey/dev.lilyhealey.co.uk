@@ -2,6 +2,13 @@
 
 class URL extends URL_Base
 {	
+	// $this->urls = array of all object urls
+	// $this->url = this object's url
+	// $this->ids = array of all object ids
+	// $this->id = this object's id
+	// if no object selected, 
+	// $this->urls, $this->url, and $this->ids are not set
+	// $this->id is 0
 	function __construct()
 	{
 		global $oo;
@@ -30,35 +37,9 @@ class URL extends URL_Base
 			unset($ids);
 		
 		$this->urls = $urls;
-		$this->url = $urls[count($urls)-1];
+		$this->url = end($urls);
 		$this->ids = $ids;
 		$this->id = $id;
-	}
-	
-	// FIX THIS CODE
-	// this probably belongs somewhere else
-	public function parents()
-	{
-		global $oo;
-		global $admin_path;
-		$urls = $this->urls;
-		$ids = $this->ids;
-		$parents[] = "";
-		
-		for($i = 0; $i < count($urls)-1; $i++)
-		{
-			$parents[$i]['url'] = $admin_path."browse/";
-			for($j = 0; $j < $i + 1; $j++)
-			{
-				$parents[$i]['url'].= $urls[$j];
-				if($j < $i)
-					$parents[$i]['url'].= "/";
-			}
-			$parents[$i]["name"] = $oo->name($ids[$i]);
-		}
-		if($parents[0] == "")
-			unset($parents);
-		return $parents;
 	}
 }
 

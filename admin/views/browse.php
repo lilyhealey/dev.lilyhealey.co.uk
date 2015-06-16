@@ -17,7 +17,7 @@
 		if($item)
 		{
 			//$keys = array_keys($item);
-			$keys = ["id", "name1", "url"];
+			$keys = ["id", "name1", "url", "deck"];
 			foreach($keys as $k)
 			{
 				if($item[$k])

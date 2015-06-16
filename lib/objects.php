@@ -3,35 +3,35 @@
 	class for interaction with the OBJECTS table
 
 	fields
-		+ blob
-			- deck
-			- body
-			- notes
-		+ int
-			- id
-			- active
-			- rank
-		+ text
-			- address1
-			- address2
-		+ tinytext
-			- name1
-			- name2
-			- city
-			- state
-			- zip
-			- country
-			- phone
-			- fax
-			- url
-			- email
-			- head
-		+ datetime
-			- created
-			- modified
-			- begin
-			- end
-			- date
+	+ blob
+		- deck
+		- body
+		- notes
+	+ int
+		- id
+		- active
+		- rank
+	+ text
+		- address1
+		- address2
+	+ tinytext
+		- name1
+		- name2
+		- city
+		- state
+		- zip
+		- country
+		- phone
+		- fax
+		- url
+		- email
+		- head
+	+ datetime
+		- created
+		- modified
+		- begin
+		- end
+		- date
 ---------------------------------------------------------*/
 class Objects extends Model
 {
@@ -322,6 +322,12 @@ class Objects extends Model
 		return array('type'=>$type, 'id'=>$id,'o'=>$o,'depth'=>$d,'url'=>$url);
 	}
 	
+	// takes: an array of ids
+	// returns: an array of arrays corresponding to a very specific traversal of the tree
+	// all top-level nodes are returned
+	// all 'parents' w/r/t to the array of ids are returned
+	// if the last node in ids has children, children are also returned
+	// if not, siblings are returned
 	public function nav_clean($ids)
 	{
 		$records = array();
@@ -334,7 +340,7 @@ class Objects extends Model
 			// if this top-level object is an ancestor of the current obj		
 			if($pass && $t_id == $ids[0])
 			{
-				$pass = false; // short-circuit if statement
+				$pass = false; // short-circuit if-statement
 				$s_id = array_pop($ids);
 				
 				// parents

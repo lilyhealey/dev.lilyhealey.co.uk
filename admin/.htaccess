@@ -1,5 +1,5 @@
 AuthUserFile /usr/home/lilyhealey/public_html/lilyhealey.co.uk/.htpasswd
-AuthName "leh db"
+AuthName "god save the queen"
 AuthType Basic
 Require valid-user
 # 

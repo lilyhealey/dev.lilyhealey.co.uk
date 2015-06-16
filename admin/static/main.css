@@ -6,7 +6,7 @@
  
 html {
 	font-family: "Helvetica Neue", Helvetica, "Menlo", monospace;
-	font-size: 11px;
+	font-size: 13px;
 	/* safari can't handle fonts */
 	-webkit-font-smoothing: subpixel-antialiased;
 	color: #000;
@@ -25,13 +25,21 @@ body {
 	z-index: 1;
 }
 
-/* forms */
-.form > div {
-	margin-left: 10px;
-	margin-right: 10px;
+::selection {
+	color: white;
+	background: red;
 }
 
-textarea {
+/* forms */
+.form > div {
+/* 
+	margin-left: 10px;
+	margin-right: 10px;
+ */
+}
+
+textarea, 
+input {
 	font-family: inherit;
 	color: #fff;
 	background-color: #111;
@@ -58,8 +66,13 @@ textarea.caption {
   	margin-bottom: 5px;
 }
 
-img, textarea {
+img, 
+textarea {
 	width: 100%;
+}
+
+select {
+	max-width: 100%;
 }
 
 /* links */
@@ -69,13 +82,23 @@ a:visited {
 	color: #ff0000;
 }
 
-.highlight a:link, 
-.highlight a:visited {
-	color: #39cf7c;
+.parent a:link, 
+.parent a:visited {
+	color: #00ff00;
+}
+
+.self a:link,
+.self a:visited {
+	color: #000;
+/* 	text-transform: uppercase; */
+	background-color: #fff;
+	padding-left:2px;
+	padding-right:2px;
 }
 
 a:hover,
-.highlight a:hover {
+.parent a:hover,
+.self a:hover {
 	color: #ffff00;
 }
 

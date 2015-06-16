@@ -91,8 +91,7 @@ class Model
 		$sql = "UPDATE ".static::table_name." 
 				SET ".$z."
 				WHERE id = '".$id."'";
-		$db->query($sql);
-		return $sql;
+		return $db->query($sql);
 	}
 	
 	// deactivate row with id = $id

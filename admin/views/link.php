@@ -9,8 +9,6 @@
 	}
 	if($rr->submit != "link") 
 	{
-		echo $l_url;
-		print_r($_POST);
 		?><div class="self-container">
 			<div class="self"><a href="<? echo $c_url; ?>"><? echo $name; ?></a></div>
 			<div class="self">
@@ -26,32 +24,32 @@
 				method="post" 
 			>
 				<div class="form">
-					<div>
-						<select name='wires_toid'><?
-							$items = $oo->unlinked_list($uu->id);
-							$all_items = $oo->traverse(0);
-							foreach($items as $i)
-							{
-							?><!--option value="<? echo $i; ?>"><?
-								echo $oo->name($i);
-							?></option--><?	
-							}
-							foreach($all_items as $i)
-							{
-								$m = end($i);
-								if(!in_array($m, $items))
-									$m = 0; 
-								$d = count($i); 
-								$t = "&nbsp;&nbsp;&nbsp;";
-							?><option value="<? echo $m; ?>"><?
-								for($j=1; $j < $d; $j++)
-									echo $t;
-								if($m)
-									echo $oo->name($m);
-							?></option><?
-							}
-						?></select>
-					</div>
+					<select name='wires_toid'><?
+						$items = $oo->unlinked_list($uu->id);
+						$all_items = $oo->traverse(0);
+						foreach($items as $i)
+						{
+						?><!--option value="<? echo $i; ?>"><?
+							echo $oo->name($i);
+						?></option--><?	
+						}
+						foreach($all_items as $i)
+						{
+							$m = end($i);
+							if(!in_array($m, $items))
+								$m = 0; 
+							$d = count($i); 
+							$t = "&nbsp;&nbsp;&nbsp;";
+						?><option value="<? echo $m; ?>"><?
+							for($j=1; $j < $d; $j++)
+								echo $t;
+							if(!$m)
+								echo "(".$oo->name(end($i)).")";
+							else
+								echo $oo->name(end($i));
+						?></option><?
+						}
+					?></select>
 					<div>
 						<input 
 							name='cancel' 

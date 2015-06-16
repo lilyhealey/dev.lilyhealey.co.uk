@@ -33,8 +33,8 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 					?><div>
 						<div>image <? echo $j+1; ?></div>
 						<div>
-							<input type='file' name='upload<?php echo $j; ?>'>
-							<textarea name="captions[<? echo $j; ?>]" class="caption"></textarea>
+							<input type='file' name='uploads[]'>
+							<textarea name="captions[]" class="caption"></textarea>
 						</div>
 					</div><?
 				}
@@ -55,11 +55,10 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 		else
 		{
 			// objects
-			
 			foreach($vars as $var)
 				$$var = addslashes($rr->$var);
 
-			//  Process variables
+			//  process variables
 			if (!$name1) 
 				$name1 = "untitled";
 			$begin = ($begin) ? date("Y-m-d H:i:s", strToTime($begin)) : NULL;
@@ -72,15 +71,15 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 			// siblings are all the children of the record to which
 			// this new record is being added
 			$siblings = $oo->children_ids($uu->id);
-			$valid_url = true;
+			$url_is_valid = true;
 			foreach($siblings as $s_id)
 			{
-				$valid_url = ($url != $oo->get($s_id)["url"]);
-				if(!$valid_url)
+				$url_is_valid = ($url != $oo->get($s_id)["url"]);
+				if(!$url_is_valid)
 					break;
 			}
 			
-			if($valid_url)
+			if($url_is_valid)
 			{
 				$dt = date("Y-m-d H:i:s");
 				$arr["created"] = "'".$dt."'";
@@ -92,73 +91,12 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 
 				$toid = $oo->insert($arr);
 	
-				unset($arr);
-	
-				/* wires */
-				if($uu->id)
-					$fromid = $uu->id;
-				else
-					$fromid = 0;
-				$arr["created"] = "'".$dt."'";
-				$arr["modified"] = "'".$dt."'";
-				$arr["fromid"] = "'".$fromid."'";
-				$arr["toid"] = "'".$toid."'";
-	
-				$ww->insert($arr);
+				// wires
+				$ww->create_wire($uu->id, $toid);
 
-				/* media */
-				// this code should be factored
-				for ($i = 0; $i < $max_uploads; $i++) 
-				{
-					if ($imageName = $_FILES["upload".$i]["name"]) 
-					{
-						$m_rows = $mm->num_rows();
+				// media
+				process_media($toid);
 
-						$nameTemp = $_FILES["upload". $i]['name'];
-						$typeTemp = explode(".", $nameTemp);
-						$type = $typeTemp[sizeof($typeTemp) - 1];
-			
-						// $targetFile = str_pad(($m_rows+1), 5, "0", STR_PAD_LEFT) .".". $type;
-						$targetFile = m_pad($m_rows+1).".". $type;				
-
-						// ** Image Resizing **
-						// Only if folder ../media/hi exists
-						// First upload the raw image to ../media/hi/ folder
-						// If upload works, then resize and copy to main ../media/ folder
-						// To turn on set $resize = TRUE; FALSE by default
-						$resize = FALSE;
-						$resizeScale = 65;
-						$targetPath = ($resize) ? "../media/hi/" : "../media/";
-						$target = $targetPath . $targetFile;
-						$copy = copy($_FILES["upload".$i]['tmp_name'], $target);
-		
-						if($copy) 
-						{
-							if($resize)
-							{
-								include('lib/SimpleImage.php');
-								$image = new SimpleImage();
-								$image->load($target);
-								$image->scale($resizeScale);
-								$targetPath = "../media/";
-								$target = $targetPath . $targetFile;
-								$image->save($target);
-				
-								echo "Upload $imageName SUCCESSFUL<br />";
-								echo "Copy $target SUCCESSFUL<br />";
-							}			
-							// Add to DB's image list
-							$dt = date("Y-m-d H:i:s");
-
-							$m_arr["type"] = "'".$type."'";
-							$m_arr["object"] = "'".$toid."'";
-							$m_arr["created"] = "'".$dt."'";
-							$m_arr["modified"] = "'".$dt."'";
-							$m_arr["caption"] = "'".$rr->captions[$i]."'";
-							$mm->insert($m_arr);
-						}
-					}
-				}
 			?><div class="self-container">
 				<div class="self">
 					<p>record added successfully</p>

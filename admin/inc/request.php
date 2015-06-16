@@ -4,7 +4,11 @@ class Request
 {
 	public $page = ''; 	// is this variable even used?
 		
-	/* [add, edit] post variables */
+	// add, edit, delete, link
+	public $submit;
+	// public $action;
+	
+	// add, edit
 	public $name1;
 	public $deck;
 	public $body;
@@ -14,9 +18,8 @@ class Request
 	public $url;
 	public $rank;
 	
-	/* [add, delete, edit, link] */
-	public $submit;
-	public $action;
+	// link
+	public $wires_toid;
 	
 	public $m; // media id
 	public $medias; // array
@@ -24,9 +27,6 @@ class Request
 	public $captions;
 	public $ranks;
 	public $deletes;
-		
-	/* link */
-	public $wires_toid;
 	
 	function __construct()
 	{

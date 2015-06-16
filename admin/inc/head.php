@@ -1,4 +1,4 @@
-<?php
+<?
 // path to config file
 $config = __DIR__."/../../lib/config.php";
 require_once($config);
@@ -16,9 +16,6 @@ $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
 $rr = new Request();
-
-// parents
-$parents = $uu->parents();
 
 // self
 $item = $oo->get($uu->id);
@@ -60,7 +57,7 @@ $nav = $oo->nav_clean($uu->ids);
 						foreach($nav as $n)
 						{
 							$d = $n['depth'];
-							$t = $n['type'];
+							$t = $n['type'];					
 							if($d > $prevd)
 							{
 							?><div class="nav-level"><?
@@ -72,9 +69,13 @@ $nav = $oo->nav_clean($uu->ids);
 								?></div><?
 								}
 							}
-							if($t == "parent" || $t == "self")
+							if($t == "parent")
 							{
-							?><div class="highlight"><?
+							?><div class="parent"><?
+							}
+							elseif($t == "self")
+							{
+							?><div class="self"><?
 							}
 							else
 							{
