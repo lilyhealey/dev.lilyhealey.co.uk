@@ -1,4 +1,4 @@
-<?php
+<?
 $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 $kvars = array();
 $kvars["name1"] = "text";
