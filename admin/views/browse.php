@@ -29,11 +29,13 @@
 				}
 			}
 			$media_ids = $oo->media_ids($uu->id);
-			foreach($media_ids as $m)
+			foreach($media_ids as $m_id)
 			{
-				$m_url = m_url($mm->get($m));
+				$m = $mm->get($m_id);
+				$m_url = m_url($m);
 				?><div class='preview'>
 					<img src="<? echo $m_url; ?>">
+					<div class='caption'><? echo $m['caption']; ?></div>
 				</div><?
 			}
 		}

@@ -1,5 +1,6 @@
 <?php
-
+// wrapper class for http post variables
+// should this be custom per view? perhaps
 class Request
 {
 	public $page = ''; 	// is this variable even used?
@@ -35,7 +36,7 @@ class Request
 		// post variables
 		$vars = array(	'name1', 'deck', 'body', 'notes', 'begin', 'end', 'url', 'rank',
 						'medias', 'types', 'captions', 'ranks', 'deletes',
-						'action', 'submit',
+						'submit',
 						'wires_toid');
 
 		foreach($vars as $v)	

@@ -68,11 +68,14 @@ class Model
 	public static function insert($arr)
 	{
 		global $db;
+		$dt = date("Y-m-d H:i:s");
+		$arr["created"] = "'".$dt."'";
+		$arr["modified"] = "'".$dt."'";
 		$keys = implode(", ", array_keys($arr));
 		$values = implode(", ", array_values($arr));
 		$sql = "INSERT INTO " . static::table_name . " (";
 		$sql .= $keys . ") VALUES(" . $values . ")";
-		$db->query($sql); 
+		$db->query($sql);
 		return $db->insert_id;
 	}
 	

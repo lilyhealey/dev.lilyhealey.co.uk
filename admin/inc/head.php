@@ -17,6 +17,8 @@ $ww = new Wires();
 $uu = new URL();
 $rr = new Request();
 
+$js_back = "javascript:history.back();";
+
 // self
 $item = $oo->get($uu->id);
 
@@ -62,27 +64,18 @@ $nav = $oo->nav_clean($uu->ids);
 							{
 							?><div class="nav-level"><?
 							}
-							else
-							{
-								for($i = 0; $i < $prevd - $d; $i++)
-								{
+							else {
+								for($i = 0; $i < $prevd - $d; $i++) {
 								?></div><?
 								}
 							}
-							if($t == "parent")
-							{
+							if($t == "parent") {
 							?><div class="parent"><?
-							}
-							elseif($t == "self")
-							{
+							} elseif($t == "self") {
 							?><div class="self"><?
-							}
-							else
-							{
-							?><div><?
-							}
-							?>
-								<a href="<? echo $admin_path.'browse/'.$n['url']; ?>"><?
+							} else {
+							?><div><? }
+							?><a href="<? echo $admin_path.'browse/'.$n['url']; ?>"><?
 									echo $n['o']['name1'];
 								?></a>
 							</div><?

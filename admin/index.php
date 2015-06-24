@@ -7,13 +7,11 @@ $view = "views/";
 $view.= $uri[2] ? $uri[2]: "browse";
 $view.= ".php";
 
-try
-{
+try {
 	if(!file_exists($view))
 		throw new Exception("404");
 }
-catch(Exception $e) 
-{
+catch(Exception $e) {
 	$view = "views/errors/".$e->getMessage().".php";
 }
 

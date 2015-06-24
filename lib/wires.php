@@ -66,8 +66,8 @@ class Wires extends Model
 	public function create_wire($fromid, $toid)
 	{
 		$dt = date("Y-m-d H:i:s");
-		$arr["created"] = "'".$dt."'";
-		$arr["modified"] = "'".$dt."'";
+// 		$arr["created"] = "'".$dt."'";
+// 		$arr["modified"] = "'".$dt."'";
 		$arr["fromid"] = $fromid;
 		$arr["toid"] = $toid;
 		return $this->insert($arr);

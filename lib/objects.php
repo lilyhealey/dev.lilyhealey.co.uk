@@ -323,7 +323,8 @@ class Objects extends Model
 	}
 	
 	// takes: an array of ids
-	// returns: an array of arrays corresponding to a very specific traversal of the tree
+	// returns: an array of arrays corresponding to a 
+	// very specific traversal of the tree
 	// all top-level nodes are returned
 	// all 'parents' w/r/t to the array of ids are returned
 	// if the last node in ids has children, children are also returned

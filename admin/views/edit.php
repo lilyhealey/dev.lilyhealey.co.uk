@@ -130,7 +130,7 @@ if ($rr->submit != "update" && $uu->id)
 						name='cancel' 
 						type='button' 
 						value='cancel' 
-						onClick="javascript:history.back();" 
+						onClick="<? echo $js_back; ?>" 
 					>
 					<input name='submit' type='submit' value='update'>
 				</div>
@@ -242,7 +242,7 @@ else
 	}
 	else
 	{
-		?><p>record not updated, <a href="javascript:history.back();">try again</a></p><?
+		?><p>record not updated, <a href="<? echo $js_back; ?>">try again</a></p><?
 	}
 } 
 ?></div>

@@ -1,6 +1,8 @@
 <?
 $b_url = $admin_path.'browse/'.$uu->urls();
 $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
+$f = array();
+$dt_fmt = "Y-m-d H:i:s";
 ?><div id="body-container">
 	<div id="body" class="centre"><?
 		// show form
@@ -44,7 +46,7 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 						name='cancel' 
 						value='cancel'
 						type='button' 
-						onClick="javascript:history.back();"
+						onClick="<? echo $js_back; ?>"
 					>
 					<input name='submit' value='add' type='submit'>
 				</div>
@@ -56,44 +58,13 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 		{
 			// objects
 			foreach($vars as $var)
-				$$var = addslashes($rr->$var);
-
-			//  process variables
-			if (!$name1) 
-				$name1 = "untitled";
-			$begin = ($begin) ? date("Y-m-d H:i:s", strToTime($begin)) : NULL;
-			$end = ($end) ? date("Y-m-d H:i:s", strToTime($end)) : NULL;
-			if(!$url)
-				$url = slug($name1);
-			
-			// check that the desired URL is valid
-			// URL is valid if it is not the same as any of its siblings
-			// siblings are all the children of the record to which
-			// this new record is being added
+				$f[$var] = addslashes($rr->$var);
 			$siblings = $oo->children_ids($uu->id);
-			$url_is_valid = true;
-			foreach($siblings as $s_id)
+			$toid = insert_object($f, $siblings);
+			if($toid)
 			{
-				$url_is_valid = ($url != $oo->get($s_id)["url"]);
-				if(!$url_is_valid)
-					break;
-			}
-			
-			if($url_is_valid)
-			{
-				$dt = date("Y-m-d H:i:s");
-				$arr["created"] = "'".$dt."'";
-				$arr["modified"] = "'".$dt."'";
-	
-				foreach($vars as $var)
-					if($$var)
-						$arr[$var] = "'".$$var."'";
-
-				$toid = $oo->insert($arr);
-	
 				// wires
 				$ww->create_wire($uu->id, $toid);
-
 				// media
 				process_media($toid);
 
@@ -106,7 +77,7 @@ $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
 			}
 			else
 			{
-			?><p>record not created, <a href="javascript:history.back();">try again</a></p><?
+			?><p>record not created, <a href="<? echo $js_back; ?>">try again</a></p><?
 			}
 		} 
 	?></div>

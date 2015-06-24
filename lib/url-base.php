@@ -3,6 +3,8 @@ class URL_Base
 {
 	public $urls; 	// array of all object urls
 	public $url; 	// this object's url
+	public $url_str;
+	public $back_url;
 	public $ids; 	// array of all object ids
 	public $id;		// this object's id
 

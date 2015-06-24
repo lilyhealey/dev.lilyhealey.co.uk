@@ -55,7 +55,7 @@
 							name='cancel' 
 							type='button' 
 							value='cancel' 
-							onClick="javascript:history.back();"
+							onClick="<? echo $js_back; ?>"
 						>
 						<input name='submit' type='submit' value="link">
 					</div>
@@ -81,7 +81,7 @@
 		}
 		else
 		{
-		?><p>record not linked, <a href="javascript:history.back();">try again</a></p><?
+		?><p>record not linked, <a href="<? echo $js_back; ?>">try again</a></p><?
 		}
 	}
 	?></div>

@@ -40,6 +40,8 @@ class URL extends URL_Base
 		$this->url = end($urls);
 		$this->ids = $ids;
 		$this->id = $id;
+		$this->url_str = implode($urls);
+		// $this->back_url = 
 	}
 }
 

@@ -35,6 +35,7 @@ function m_url($m)
 	return $media_path.m_pad($m['id']).".".$m['type'];
 }
 
+// this has not been tested
 function resize($src, $dest, $scale)
 {
 	include('lib/SimpleImage.php');
@@ -42,6 +43,48 @@ function resize($src, $dest, $scale)
 	$si->load($src);
 	$si->scale($scale);
 	$si->save($dest);
+}
+
+// for use on add.php
+// return false if process fails
+// return id of new object on success
+function insert_object(&$a, $siblings)
+{
+	global $oo;
+	global $dt_fmt;
+	
+	if(!$a['name1'])
+		$a['name1'] = 'untitled';
+	
+	if($a['begin'])
+		$a['begin'] = date($dt_fmt, strToTime($a['begin']));
+	else
+		$a['begin'] = NULL;
+		
+	if($a['end'])
+		$a['end'] = date($dt_fmt, strToTime($a['begin']));
+	else
+		$a['end'] = NULL;
+	
+	if($a['url'])
+		$a['url'] = slug($a['url']);
+
+	else
+		$a['url'] = slug($a['name1']);
+	
+	foreach($siblings as $s_id)
+		if($a['url'] == $oo->get($s_id)['url'])
+			return false;
+	
+	foreach($a as $key => $value)
+		$a[$key] = "'".$value."'";
+
+	return $oo->insert($a);
+}
+
+// for use on edit.php
+function update_object()
+{
 }
 
 function process_media($toid)
@@ -53,7 +96,6 @@ function process_media($toid)
 	global $resize_scale;
 	global $media_root;
 	
-	$dt = date("Y-m-d H:i:s");
 	$m_rows = $mm->num_rows();
 	$m_old = $m_rows;
 	foreach($_FILES["uploads"]["error"] as $key => $error)
@@ -76,8 +118,6 @@ function process_media($toid)
 				// add to db's image list
 				$m_arr["type"] = "'".$m_type."'";
 				$m_arr["object"] = "'".$toid."'";
-				$m_arr["created"] = "'".$dt."'";
-				$m_arr["modified"] = "'".$dt."'";
 				$m_arr["caption"] = "'".$rr->captions[$key+count($rr->medias)]."'";
 				$mm->insert($m_arr);
 			}
