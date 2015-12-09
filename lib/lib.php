@@ -55,31 +55,56 @@ function insert_object(&$a, $siblings)
 	
 	if(!$a['name1'])
 		$a['name1'] = 'untitled';
-	
-	if($a['begin'])
-		$a['begin'] = date($dt_fmt, strToTime($a['begin']));
-	else
-		$a['begin'] = NULL;
-		
-	if($a['end'])
-		$a['end'] = date($dt_fmt, strToTime($a['begin']));
-	else
-		$a['end'] = NULL;
-	
+
 	if($a['url'])
 		$a['url'] = slug($a['url']);
-
 	else
 		$a['url'] = slug($a['name1']);
 	
 	foreach($siblings as $s_id)
 		if($a['url'] == $oo->get($s_id)['url'])
 			return false;
-	
+			
 	foreach($a as $key => $value)
-		$a[$key] = "'".$value."'";
+	{
+		if($key == 'body')
+		{
+// 			file_put_contents($p."out.txt", $value);
+// 			exec($p."Markdown.pl ".$p."out.txt", $md);
+// 			$md = implode("\n", $md);
+			$a[$key] = "'".md2html($value)."'";
+		}
+		else if($value)
+			$a[$key] = "'".$value."'";
+		else
+			$a[$key] = "null";
+	}
 
 	return $oo->insert($a);
+}
+
+function md2html($md)
+{
+	if(!$md)
+		return "";
+	$p = "/usr/home/lilyhealey/public_html/dev.lilyhealey.co.uk/lib/";
+	$f = "out.txt";
+	file_put_contents($p.$f, $md);
+	exec($p."Markdown.pl ".$p.$f, $html);
+	unlink($p.$f);
+	return implode("\n", $html);
+}
+
+function html2md($html)
+{
+	if(!$html)
+		return "";
+	$p = "/usr/home/lilyhealey/public_html/dev.lilyhealey.co.uk/lib/";
+	$f = "out.txt";
+	file_put_contents($p.$f, $html);
+	exec($p."html2text.py ".$p.$f, $md);
+	unlink($p.$f);
+	return implode("\n", $md);
 }
 
 // for use on edit.php

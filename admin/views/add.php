@@ -1,6 +1,16 @@
 <?
 $b_url = $admin_path.'browse/'.$uu->urls();
 $vars = array("name1", "deck", "body", "notes", "begin", "end", "url", "rank");
+$kvars = array();
+$kvars["name1"] = "text";
+$kvars["deck"] = "textarea";
+$kvars["body"] = "textarea";
+$kvars["notes"] = "textarea";
+$kvars["begin"] = "datetime-local";
+$kvars["end"] = "datetime-local";
+$kvars["url"] = "text";
+$kvars["rank"] = "number";
+
 $f = array();
 $dt_fmt = "Y-m-d H:i:s";
 ?><div id="body-container">
@@ -20,20 +30,32 @@ $dt_fmt = "Y-m-d H:i:s";
 				action="<? echo $form_url; ?>" 
 				method="post"
 			>
-				<div id="form"><?
+				<div class="form"><?
 				// object data
 				foreach($vars as $var)
 				{
-					?><div>
-						<div><? echo $var; ?></div>
-						<div><textarea name='<? echo $var; ?>'></textarea></div>
+					?><div class="field">
+						<div class="field-name"><? echo $var; ?></div>
+						<div><?
+						if($kvars[$var] == "textarea")
+						{
+						?><textarea name='<? echo $var; ?>' class='large'></textarea><?
+						}
+						else
+						{
+						?><input 
+							name='<? echo $var; ?>' 
+							type='<? echo $kvars[$var]; ?>'
+						><?
+						}
+						?></div>
 					</div><?
 				}
 				//  upload new images
 				for ($j = 0; $j < $max_uploads; $j++)
 				{
-					?><div>
-						<div>image <? echo $j+1; ?></div>
+					?><div class="field">
+						<div class="field-name">image <? echo $j+1; ?></div>
 						<div>
 							<input type='file' name='uploads[]'>
 							<textarea name="captions[]" class="caption"></textarea>
@@ -41,7 +63,7 @@ $dt_fmt = "Y-m-d H:i:s";
 					</div><?
 				}
 				?></div>
-				<div>
+				<div class="button-container">
 					<input 
 						name='cancel' 
 						value='cancel'

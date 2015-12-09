@@ -1,30 +1,26 @@
-<div id="body-container">
+<div id="body-container" class="flex-max">
 	<div id="body" class="centre">
-		<span><? echo $name; ?></span>
-		<div class="actions"><?
+		<div><? echo $name; ?></div>
+		<div class="button-container"><?
 			if($item)
 			{
-			?>
-			<a href="<? echo $admin_path."edit/".$uu->urls(); ?>">edit</a>
-			<a href="<? echo $admin_path."delete/".$uu->urls(); ?>">delete</a>
-			<?
+			?><a class="button" href="<? echo $admin_path."edit/".$uu->urls(); ?>">edit</a><?
+			?><a class="button" href="<? echo $admin_path."delete/".$uu->urls(); ?>">delete</a><?
 			}
-			?>
-			<a href="<? echo $admin_path."add/".$uu->urls(); ?>">add</a>
-			<a href="<? echo $admin_path."link/".$uu->urls(); ?>">link</a>
+			?><a class="button" href="<? echo $admin_path."add/".$uu->urls(); ?>">add</a><?
+			?><a class="button" href="<? echo $admin_path."link/".$uu->urls(); ?>">link</a>
 		</div><?
 		// object contents
 		if($item)
 		{
-			//$keys = array_keys($item);
-			$keys = ["id", "name1", "url", "deck"];
+			$keys = array_keys($item);
 			foreach($keys as $k)
 			{
 				if($item[$k])
 				{
-				?><div>
-					<span><? echo $k; ?>: </span>
-					<span><? echo $item[$k]; ?></span>
+				?><div class="field">
+					<div class="field-name"><? echo $k; ?></div>
+					<div><? echo $item[$k]; ?></div>
 				</div><?
 				}
 			}
@@ -33,8 +29,11 @@
 			{
 				$m = $mm->get($m_id);
 				$m_url = m_url($m);
-				?><div class='preview'>
-					<img src="<? echo $m_url; ?>">
+				?><div class="field">
+					<div class="field-name"><? echo end(explode("/", $m_url)); ?></div>
+					<div class='preview'>
+						<img src="<? echo $m_url; ?>">
+					</div>
 					<div class='caption'><? echo $m['caption']; ?></div>
 				</div><?
 			}

@@ -50,12 +50,18 @@ if ($rr->submit != "update" && $uu->id)
 				// show object data
 				foreach($vars as $var)
 				{
-				?><div>
-					<div><? echo $var; ?></div>
+				?><div class="field">
+					<div class="field-name"><? echo $var; ?></div>
 					<div><?
 						if($kvars[$var] == "textarea")
 						{
-						?><textarea name='<? echo $var; ?>'><? echo $item[$var]; ?></textarea><?
+						?><textarea name='<? echo $var; ?>' class='large'><?
+							if($item[$var])
+							{ 
+								// convert from html to markdown
+								echo html2md($item[$var]);
+							}
+						?></textarea><?
 						}
 						else
 						{
@@ -70,7 +76,7 @@ if ($rr->submit != "update" && $uu->id)
 				for($i = 0; $i < $num_medias; $i++)
 				{
 				?><div>
-					<div>Image <? echo str_pad($i+1, 2, "0", STR_PAD_LEFT);?></div>
+					<div class="field-name">image <? echo str_pad($i+1, 2, "0", STR_PAD_LEFT);?></div>
 					<div class='preview'>
 						<a href="<? echo $medias[$i]['file']; ?>" target="_blank">
 							<img src="<? echo $medias[$i]['display']; ?>">
@@ -79,7 +85,7 @@ if ($rr->submit != "update" && $uu->id)
 					<textarea name="captions[]"><?php
 						echo $medias[$i]["caption"];
 					?></textarea>
-					<div>Rank</div>
+					<span>rank</span>
 					<select name="ranks[<? echo $i; ?>]"><?php
 						for($j = 1; $j <= $num_medias; $j++)
 						{
@@ -97,11 +103,12 @@ if ($rr->submit != "update" && $uu->id)
 							}
 						}
 					?></select>
-					<input
-						type="checkbox"
-						name="deletes[<? echo $i; ?>]"
-					>
-					<div>delete image</div>
+					<label>
+						<input
+							type="checkbox"
+							name="deletes[<? echo $i; ?>]"
+						>
+					delete image</label>
 					<input 
 						type="hidden"
 						name="medias[<? echo $i; ?>]"
@@ -118,21 +125,21 @@ if ($rr->submit != "update" && $uu->id)
 				for($j = 0; $j < $max_uploads; $j++)
 				{
 				?><div>
-					<div>Image <?php echo str_pad(++$i, 2, "0", STR_PAD_LEFT); ?></div>
+					<div class="field-name">Image <?php echo str_pad(++$i, 2, "0", STR_PAD_LEFT); ?></div>
 					<div><input type="file" name="uploads[]"></div>
 					<textarea name="captions[]"><?php
 							echo $medias[$i]["caption"];
 					?></textarea>
 				</div><?php
 				} ?>
-				<div>	
+				<div class="button-container">	
 					<input 
 						name='cancel' 
 						type='button' 
 						value='cancel' 
 						onClick="<? echo $js_back; ?>" 
-					>
-					<input name='submit' type='submit' value='update'>
+					><?
+					?><input name='submit' type='submit' value='update'>
 				</div>
 			</div>
 		</form>
@@ -145,7 +152,12 @@ else
 {	
 	// objects
 	foreach($vars as $var)
-		$$var = addslashes($rr->$var);
+	{
+		if($var == 'body')
+			$$var = md2html($rr->$var);
+		else
+			$$var = addslashes($rr->$var);
+	}
 
 	//  process variables
 	if (!$name1) 

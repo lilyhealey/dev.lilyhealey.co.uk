@@ -43,8 +43,8 @@ $nav = $oo->nav_clean($uu->ids);
 		<link rel="stylesheet" href="<? echo $admin_path; ?>static/main.css">
 	</head>
 	<body>
-		<div id="page">
-			<div id="header-container">
+		<div id="page" class="flex-container">
+			<div id="header-container" class="flex-min">
 				<header class="centre">
 					<div id="date-container">
 						<span id="date"><?php 

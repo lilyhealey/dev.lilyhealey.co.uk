@@ -17,5 +17,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ index.php [L]
 
+# RewriteEngine on
+# RewriteCond %{REQUEST_URI} !/index.php$
+# RewriteCond %{REQUEST_URI} !\.(css|mov|png)$
+# RewriteRule (.*) /index.php [R=302,L]
+
 # RewriteCond %{REQUEST_URI} ^(.*/)index\.php$ [NC]
 # RewriteRule . %1 [R=301,NE,L]
