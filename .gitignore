@@ -1,5 +1,7 @@
-# der
+# annoying sys files
 .DS_Store
+
+# emacs backups
 *~
 
 # media files
@@ -9,6 +11,7 @@
 *.pdf
 *.png
 
-# server-config
+# config files
 config.php
 .htpasswd
+.htaccess

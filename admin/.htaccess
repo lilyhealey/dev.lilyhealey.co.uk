@@ -1,4 +1,4 @@
-AuthUserFile /usr/home/lilyhealey/public_html/lilyhealey.co.uk/.htpasswd
+AuthUserFile /Users/lily/Sites/.htpasswd
 AuthName "god save the queen"
 AuthType Basic
 Require valid-user

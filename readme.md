@@ -1,6 +1,26 @@
 dev.lilyhealey.co.uk
 ----------------
 
+installation
+------------
+apache
+1. .htpasswd (for admin)
+2. .htaccess (for main app + admin)
+3. make media folder with proper permisions (755 should do it)
+mysql
+4. mysql
+	+ make mysql database
+	+ make admin, read / write, read-only accounts for db
+	+ mysql dump into db with admin account
+php
+5. config.php
+	+ add mysql info
+	+ add hostname / rootname
+
+
+
+
+
 outstanding issues: 
 + delete inc/Request.php ? 
 + deal with error pages

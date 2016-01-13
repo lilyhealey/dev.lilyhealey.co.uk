@@ -58,13 +58,9 @@ function insert_object(&$a, $siblings)
 	
 	if($a['begin'])
 		$a['begin'] = date($dt_fmt, strToTime($a['begin']));
-	else
-		$a['begin'] = NULL;
 		
 	if($a['end'])
 		$a['end'] = date($dt_fmt, strToTime($a['begin']));
-	else
-		$a['end'] = NULL;
 	
 	if($a['url'])
 		$a['url'] = slug($a['url']);
@@ -77,7 +73,12 @@ function insert_object(&$a, $siblings)
 			return false;
 	
 	foreach($a as $key => $value)
-		$a[$key] = "'".$value."'";
+	{
+		if($value)
+			$a[$key] = "'".$value."'";
+		else
+			unset($a[$key]);
+	}
 
 	return $oo->insert($a);
 }

@@ -59,6 +59,7 @@ $dt_fmt = "Y-m-d H:i:s";
 			// objects
 			foreach($vars as $var)
 				$f[$var] = addslashes($rr->$var);
+
 			$siblings = $oo->children_ids($uu->id);
 			$toid = insert_object($f, $siblings);
 			if($toid)

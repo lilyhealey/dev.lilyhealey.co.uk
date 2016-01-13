@@ -8,7 +8,9 @@ require_once("url.php");
 require_once("request.php");
 
 // logged in user via .htaccess, .htpasswd
-$user = $_SERVER['REDIRECT_REMOTE_USER'];
+$user = $_SERVER['REMOTE_USER'];
+if(!$user)
+	$user = $_SERVER['REDIRECT_REMOTE_USER'];
 $db = db_connect($user);
 
 $oo = new Objects();
