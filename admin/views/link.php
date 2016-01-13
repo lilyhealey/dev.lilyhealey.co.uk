@@ -50,7 +50,7 @@
 						?></option><?
 						}
 					?></select>
-					<div>
+					<div class="button-container">
 						<input 
 							name='cancel' 
 							type='button' 
