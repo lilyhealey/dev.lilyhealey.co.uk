@@ -38,7 +38,7 @@ $nav = $oo->nav($uu->ids);
 <html>
 	<head>
 		<title><? echo $title; ?></title>
-		<link rel="shortcut icon" href="<? echo $host;?>static/png/icon.png">
+		<link rel="shortcut icon" href="<? echo $host;?>media/png/icon.png">
 		<link rel="mask-icon" href="<? echo $host;?>media/svg/icon.svg" color="red">
 		<link rel="stylesheet" href="<? echo $host; ?>static/css/main.css">
 	</head>
