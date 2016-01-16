@@ -1,11 +1,12 @@
 <?php
 // path to config file
-$config = __DIR__."/../lib/config.php";
+$rt = $_SERVER["DOCUMENT_ROOT"]."/";
+$config =$rt."lib/config.php";
 require_once($config);
 
 // specific to this 'app'
-require_once("url.php");
-require_once("request.php");
+require_once($rt."inc/url.php");
+require_once($rt."inc/request.php");
 
 $db = db_connect("guest");
 
@@ -37,9 +38,9 @@ $nav = $oo->nav($uu->ids);
 <html>
 	<head>
 		<title><? echo $title; ?></title>
-		<link rel="shortcut icon" href="<? echo $host;?>static/icon.png">
-		<link rel="mask-icon" href="<? echo $host;?>static/icon.svg" color="red">
-		<link rel="stylesheet" href="<? echo $host; ?>static/main.css">
+		<link rel="shortcut icon" href="<? echo $host;?>static/png/icon.png">
+		<link rel="mask-icon" href="<? echo $host;?>media/svg/icon.svg" color="red">
+		<link rel="stylesheet" href="<? echo $host; ?>static/css/main.css">
 	</head>
 	<body>
 		<div id="page">

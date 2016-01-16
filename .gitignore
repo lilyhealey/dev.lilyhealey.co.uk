@@ -5,11 +5,7 @@
 *~
 
 # media files
-*.gif
-*.jpeg
-*.jpg
-*.pdf
-*.png
+media/[0-9][0-9][0-9][0-9][0-9].*
 
 # config files
 config.php

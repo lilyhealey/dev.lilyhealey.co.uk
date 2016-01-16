@@ -69,7 +69,7 @@ $to = "rgba($to, $to, $to, 1)";
 				}
 			}
 		</style>
-		<script type="text/javascript" src="static/clock.js"></script>
+		<script type="text/javascript" src="static/js/clock.js"></script>
 	</head>
 	<body>
 		<canvas id="clock-canvas"></canvas>
